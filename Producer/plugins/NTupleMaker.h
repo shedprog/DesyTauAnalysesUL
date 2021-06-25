@@ -136,7 +136,9 @@
 #include "RecoVertex/AdaptiveVertexFit/interface/AdaptiveVertexFitter.h"
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
 #include "RecoVertex/VertexPrimitives/interface/TransientVertex.h"
-//#include "DesyTauAnalyses/CandidateTools/interface/NSVfitStandaloneAlgorithm.h"
+
+#include "DesyTauAnalysesUL/Common/interface/NSVfitStandaloneAlgorithm.h"
+
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 
 #include "EgammaAnalysis/ElectronTools/interface/EGammaMvaEleEstimatorCSA14.h"
