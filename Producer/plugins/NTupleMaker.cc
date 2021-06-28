@@ -1,4 +1,4 @@
-#include "DesyTauAnalyses/Producer/plugins/NTupleMaker.h"
+#include "DesyTauAnalysesUL/Producer/plugins/NTupleMaker.h"
 #include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
 //#include "AnalysisDataFormats/TauAnalysis/interface/CompositePtrCandidateT1T2MEtFwd.h"
 //#include "TauAnalysis/CandidateTools/interface/NSVfitAlgorithmBase.h"
@@ -30,11 +30,11 @@
 #include "SimDataFormats/GeneratorProducts/interface/GenFilterInfo.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
-//#include "DesyTauAnalyses/CandidateTools/interface/candidateAuxFunctions.h"
+
+#include "DesyTauAnalysesUL/Common/interface/candidateAuxFunctions.h"
 //#include "DesyTauAnalyses/NTupleMaker/interface/idAlgos.h"
 
 //#include "ICTauSpinnerProducer.hh"
-
 
 #include <TString.h>
 #include <Compression.h>
@@ -58,7 +58,7 @@ typedef ROOT::Math::SVector<double, 3> SVector3; //// SVector: vector of size 3
 // static const unsigned int SKIM_EMU        = (1 << 6);     //64 : e+mu
 // static const unsigned int SKIM_TAUTAU     = (1 << 7);     //128: tau+tau
 
-#include "DesyTauAnalyses/Producer/interface/genMatch.h"
+#include "DesyTauAnalysesUL/Producer/interface/genMatch.h"
 
 void NTupleMaker::computePCA(double * pv, double * refPoint, double * mom, double * pca) {
 
@@ -5177,59 +5177,3 @@ unsigned int  NTupleMaker::GetTauSpinnerweights(const edm::Event& event, const e
   return theta_vec_.size();
 }
 
-
-std::string NTupleMaker::getGenTauDecayMode(const reco::GenParticle* genParticle) 
-{
-//--- determine generator level tau decay mode
-//
-//    NOTE: 
-//        (1) function implements logic defined in PhysicsTools/JetMCUtils/src/JetMCTag::genTauDecayMode
-//            for different type of argument 
-//        (2) this implementation should be more robust to handle cases of tau --> tau + gamma radiation
-//
-  
-  //std::cout << "<getGenTauDecayMode>:" << std::endl;
-
-  int numElectrons           = 0;
-  int numElecNeutrinos       = 0;
-  int numMuons               = 0;
-  int numMuNeutrinos         = 0; 
-  int numChargedHadrons      = 0;
-  int numPi0s                = 0; 
-  int numOtherNeutralHadrons = 0;
-  int numPhotons             = 0;
-
-  countDecayProducts(genParticle,
-		     numElectrons, numElecNeutrinos, numMuons, numMuNeutrinos,
-		     numChargedHadrons, numPi0s, numOtherNeutralHadrons, numPhotons);
-
-  if      ( numElectrons == 1 && numElecNeutrinos == 1 ) return std::string("electron");
-  else if ( numMuons     == 1 && numMuNeutrinos   == 1 ) return std::string("muon");
-  
-  switch ( numChargedHadrons ) {
-  case 1 : 
-    if ( numOtherNeutralHadrons != 0 ) return std::string("oneProngOther");
-    switch ( numPi0s ) {
-    case 0:
-      return std::string("oneProng0Pi0");
-    case 1:
-      return std::string("oneProng1Pi0");
-    case 2:
-      return std::string("oneProng2Pi0");
-    default:
-      return std::string("oneProngOther");
-    }
-  case 3 : 
-    if ( numOtherNeutralHadrons != 0 ) return std::string("threeProngOther");
-    switch ( numPi0s ) {
-    case 0:
-      return std::string("threeProng0Pi0");
-    case 1:
-      return std::string("threeProng1Pi0");
-    default:
-      return std::string("threeProngOther");
-    }
-  default:
-    return std::string("rare");
-  }
-}
