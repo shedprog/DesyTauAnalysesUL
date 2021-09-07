@@ -335,9 +335,9 @@ HLTlist_2018 = cms.untracked.vstring(
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v',
     )
 
-if period is '2016'   : HLTlist += HLTlist_2016
-elif period is '2017' : HLTlist += HLTlist_2017
-elif period is '2018' : HLTlist += HLTlist_2018
+if year is 2016   : HLTlist += HLTlist_2016
+elif year is 2017 : HLTlist += HLTlist_2017
+elif year is 2018 : HLTlist += HLTlist_2018
 
 print "\nTriggers that will be recorded:"
 print HLTlist
@@ -391,11 +391,11 @@ muon_hlt_filters = cms.untracked.vstring(
     'HLT_IsoMu19_eta2p1_LooseIsoPFTau20_v.*:hltOverlapFilterIsoMu19LooseIsoPFTau20',	
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_TightID_CrossL1_v.*:hltL3crIsoBigORMu18erTauXXer2p1L1f0L2f10QL3f20QL3trkIsoFiltered0p07,hltL3crIsoL1sMu18erTau24erIorMu20erTau24erL1f0L2f10QL3f20QL3trkIsoFiltered0p07',
     )
-if period is not '2016' and not isEmbedded:
+if year is not 2016 and not isEmbedded:
     muon_hlt_filters += cms.untracked.vstring(
         'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltOverlapFilterIsoMu20LooseChargedIsoPFTau27L1Seeded',
     )
-if period is '2016' :
+if year is 2016 :
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu20EG10IorMu23EG10',
     'HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu5EG20IorMu5IsoEG18IorMu5IsoEG20IorMu5EG23',
@@ -406,7 +406,7 @@ if period is '2016' :
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v.*:hltL3fL1sDoubleMu114L1f0L2f10OneMuL3Filtered17',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v.*:hltL3pfL1sDoubleMu114L1f0L2pf0L3PreFiltered8,hltL3pfL1sDoubleMu114ORDoubleMu125L1f0L2pf0L3PreFiltered8',
     )
-if period is '2017' :
+if year is 2017 :
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178Mass8Filtered',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
@@ -417,7 +417,7 @@ if period is '2017' :
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178Mass3p8Filtered',
     )
-if period is '2018' :
+if year is 2018 :
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178Mass8Filtered',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
@@ -428,7 +428,7 @@ if period is '2018' :
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178Mass3p8Filtered',
     )
-if period is '2018' and isEmbedded:
+if year is 2018 and isEmbedded:
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltL1sBigORMu18erTauXXer2p1',
     )
@@ -473,12 +473,12 @@ else:
     electron_hlt_filters +=cms.untracked.vstring(
         'HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1_v.*:hltL1sBigORLooseIsoEGXXerIsoTauYYerdRMin0p3',
     )
-if period is '2016' :
+if year is 2016 :
     electron_hlt_filters +=cms.untracked.vstring(
         'HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu20EG10IorMu23EG10',
         'HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu5EG20IorMu5IsoEG18IorMu5IsoEG20IorMu5EG23',
     )
-if period is '2017':
+if year is 2017:
     electron_hlt_filters +=cms.untracked.vstring(
         'HLT_Ele35_WPTight_Gsf_v.*:hltEGL1SingleEGOrFilter',
     )
@@ -531,19 +531,19 @@ else:
         'HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1_v.*:hltL1sBigORLooseIsoEGXXerIsoTauYYerdRMin0p3,hltL1sIsoEG22erIsoTau26erdEtaMin0p2',
         'HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1_v.*:hltOverlapFilterIsoEle24WPTightGsfLooseIsoPFTau30',
     )
-if isEmbedded and period is '2016':
+if isEmbedded and year is 2016:
     tau_hlt_filters +=cms.untracked.vstring(
 	'HLT_IsoMu19_eta2p1_LooseIsoPFTau20_v.*:hltL1sMu18erTau20er',
     )
-if isData and period is '2018':
+if isData and year is 2018:
     tau_hlt_filters +=cms.untracked.vstring(
         'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltSelectedPFTau27LooseChargedIsolationAgainstMuonL1HLTMatched',
     )
-if period is '2017':
+if year is 2017:
     tau_hlt_filters +=cms.untracked.vstring(
         'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltSelectedPFTau27LooseChargedIsolationAgainstMuonL1HLTMatched',
     )
-if isEmbedded and period is '2018':
+if isEmbedded and year is 2018:
     tau_hlt_filters +=cms.untracked.vstring(
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltL1sBigORMu18erTauXXer2p1',
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1_v.*:hltL1sBigORMu18erTauXXer2p1',
