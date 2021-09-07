@@ -2,13 +2,12 @@ import FWCore.ParameterSet.Config as cms
 
 ### NOTE: Please keep the settings for MC 18 when pushing this file to the git repository ###
 # Configurable options =======================================================================
-isData = False
-isSingleMuonData = False # needed to record track collection for NMSSM ananlysis
+isData = True
+isSingleMuonData = True # needed to record track collection for NMSSM ananlysis
 isEmbedded = False # set to true if you run over Z->TauTau embedded samples
-isRun2018D = False # needed for the correct Global Tag
 isHiggsSignal = False # Set to true if you run over higgs signal samples -> needed for STXS1p1 flags
-year = 2018
-period = '2018'
+year = 2018 # Options: 2016, 2017, 2018
+period = 'UL2018' # Options: UL2016, UL2016APV, UL2017, UL2018
 RunTauSpinnerProducer = False #only do this if you want to calculate tauspinner weights for a sample with two taus and flat tau polarisation
 
 # ============================================================================================
@@ -26,16 +25,14 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 
-# Global tag (from : https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVAnalysisSummaryTable - version : 2019-07-17)
-if isData or isEmbedded:
-    if period is '2016'   : process.GlobalTag.globaltag = '102X_dataRun2_v11'
-    elif period is '2017' : process.GlobalTag.globaltag = '102X_dataRun2_v11'
-    elif period is '2018' and not isRun2018D : process.GlobalTag.globaltag = '102X_dataRun2_v12'
-    elif period is '2018' and isRun2018D     : process.GlobalTag.globaltag = '102X_dataRun2_Prompt_v15'
+# Global tag (from : https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVRun2LegacyAnalysis - version : 2021-09-03)
+if isData or isEmbedded : process.GlobalTag.globaltag = '106X_dataRun2_v35'
+
 else:
-    if period is '2016' :   process.GlobalTag.globaltag = '102X_mcRun2_asymptotic_v7'
-    elif period is '2017' : process.GlobalTag.globaltag = '102X_mc2017_realistic_v7'
-    elif period is '2018' : process.GlobalTag.globaltag = '102X_upgrade2018_realistic_v20'
+    if period is 'UL2016' :   process.GlobalTag.globaltag = '106X_mcRun2_asymptotic_v17'
+    elif period is 'UL2016APV' : process.GlobalTag.globaltag = '106X_mcRun2_asymptotic_preVFP_v11'
+    elif period is 'UL2017' : process.GlobalTag.globaltag = '106X_mc2017_realistic_v9'
+    elif period is 'UL2018' : process.GlobalTag.globaltag = '106X_upgrade2018_realistic_v16_L1v1'
 
 print "\nGlobal Tag: " + str(process.GlobalTag.globaltag)
 
@@ -60,22 +57,8 @@ import FWCore.PythonUtilities.LumiList as LumiList
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideGoodLumiSectionsJSONFile#cmsRun
 process.source = cms.Source("PoolSource",
   fileNames = cms.untracked.vstring(
-        #"/store/data/Run2017B/Tau/MINIAOD/31Mar2018-v1/90000/FECFEF99-4F37-E811-8243-001E67792562.root"  # use for testing (2017)
-        #"/store/mc/RunIIFall17MiniAODv2/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v2/120000/420D636B-4BBB-E811-B806-0025905C54C6.root"  # use for testing (2017)
-        #"/store/mc/RunIISummer16MiniAODv3/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/120000/FE7E7C9D-3CBF-E811-8BA6-44A84223FF3C.root" # use for testing (2016)
-        #"/store/data/Run2016C/SingleMuon/MINIAOD/17Jul2018-v1/20000/FEC97F81-0097-E811-A7B9-90E2BACC5EEC.root" # use for testing (2016)
-        #"/store/mc/RunIIAutumn18MiniAOD/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/403882A2-1EFE-9D44-9D5D-EC55DDBE4091.root" # use for testing (2018)
-        #"/store/data/Run2018A/MET/MINIAOD/17Sep2018-v1/120000/7D0437D3-D24D-4C44-B015-6A2938D4D707.root" # use for testing (2018)
-        #"/store/data/Run2018B/DoubleMuon/MINIAOD/26Sep2018-v1/110000/EEE985E6-A85C-9C4C-8747-5211105A0603.root" # for testing (2018)
-        #"/store/data/Run2018D/JetHT/MINIAOD/PromptReco-v2/000/320/853/00000/2C20B666-3A9A-E811-9D32-FA163EAC4172.root"  # From Run2018D with a lot of events not passing the json file
-        #"/store/mc/RunIIFall17MiniAODv2/GluGluHToTauTau_M125_13TeV_powheg_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/90000/50FBFB5A-FE42-E811-A3E6-0025905A6092.root" #2017
-        #"/store/mc/RunIIAutumn18MiniAOD/WplusH_HToZZTo4L_M125_13TeV_tunedown_powheg2-minlo-HWJ_JHUGenV7011_pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/30000/506681B7-DE8A-BF4E-9D9D-AE6C820B9734.root"
-        "/store/mc/RunIIAutumn18MiniAOD/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/270000/53AAF1AF-2FCF-424D-BC07-8150E599971B.root " #2018
-	#"root://cms-xrd-global.cern.ch///store/user/sbrommer/gc_storage/embedding_16_legacy_miniaod/ElMu_data_legacy_2016_CMSSW9414/TauEmbedding_ElMu_data_legacy_2016_CMSSW9414_Run2016B-v2/99/merged_miniaod_998.root" #emu embedded 16 test sample
-	#"root://cms-xrd-global.cern.ch///store/user/jbechtel/gc_storage/embedding_16_legacy_miniaod/MuTau_data_legacy_2016_CMSSW9414/TauEmbedding_MuTau_data_legacy_2016_CMSSW9414_Run2016B-v4/99/merged_miniaod_998.root" #mt embedded 16 test sample
-	#"root://cms-xrd-global.cern.ch///store/user/jbechtel/gc_storage/MuTau_data_2018ABC_CMSSW1020/TauEmbedding_MuTau_data_2018ABC_CMSSW1020_Run2018A/1/merged_100.root" #mt embedded 18 test sample
-	#"root://cms-xrd-global.cern.ch///store/user/aakhmets/gc_storage/MuTau_data_2017_CMSSW944_gridka/TauEmbedding_MuTau_data_2017_CMSSW944_Run2017F/99/merged_9998.root"
-	#"root://cms-xrd-global.cern.ch//store/mc/RunIIFall17MiniAODv2/VBFHToTauTauUncorrelatedDecay_Filtered_M125_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/F2FF8AFB-DF01-EA11-9882-5065F381C251.root"#testsample with flat tau polarisation (tauspinner, 2017)
+        #"/store/mc/RunIISummer20UL18MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/120000/001C8DDF-599C-5E45-BF2C-76F887C9ADE9.root" #UL 2018 MC
+        "/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
 	),
   skipEvents = cms.untracked.uint32(0),
   #lumisToProcess = LumiList.LumiList(filename = 'json/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt').getVLuminosityBlockRange()
@@ -111,11 +94,11 @@ from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMet
 
 # If you only want to re-correct and get the proper uncertainties
 runMetCorAndUncFromMiniAOD(process,
-                           isData=isData,
-                           isEmbeddedSample=isEmbedded,
-                           fixEE2017 = bool(period=='2017'),
-                           fixEE2017Params = {'userawPt': True, 'ptThreshold':50.0, 'minEtaThreshold':2.65, 'maxEtaThreshold': 3.139} ,
-                           postfix = "ModifiedMET"
+                           isData=isData
+                           #isEmbeddedSample=isEmbedded,
+                           #fixEE2017 = bool(period=='2017'),
+                           #fixEE2017Params = {'userawPt': True, 'ptThreshold':50.0, 'minEtaThreshold':2.65, 'maxEtaThreshold': 3.139} ,
+                           #postfix = "ModifiedMET"
                            )
 
 # PuppiMET
@@ -125,7 +108,7 @@ makePuppiesFromMiniAOD( process, True );
 # If you only want to re-correct and get the proper uncertainties
 runMetCorAndUncFromMiniAOD(process,
                            isData=isData,
-                           isEmbeddedSample=isEmbedded,
+                           #isEmbeddedSample=isEmbedded,
                            metType="Puppi",
                            postfix="Puppi",
                            jetFlavor="AK4PFPuppi",
@@ -135,7 +118,7 @@ runMetCorAndUncFromMiniAOD(process,
 process.puppiNoLep.useExistingWeights = True
 process.puppi.useExistingWeights = True
 
-# MET filter for 2018 (from : https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#How_to_run_ecal_BadCalibReducedM)
+# MET filter for 2018 (from : https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#How_to_run_ecal_BadCalibReducedM)//Dummy for UL at the moment
 process.load('RecoMET.METFilters.ecalBadCalibFilter_cfi')
 baddetEcallist = cms.vuint32(
                              [872439604,872422825,872420274,872423218,
@@ -148,7 +131,7 @@ baddetEcallist = cms.vuint32(
                               872421955,872421567,872437184,872421951,
                               872421694,872437056,872437057,872437313])
 
-if period == "2018" or period == "2017":
+if period == "UL2018" or period == "UL2017" or period == "UL2016" or period == "UL2016APV":
     process.ecalBadCalibReducedMINIAODFilter = cms.EDFilter(
         "EcalBadCalibFilter",
         EcalRecHitSource = cms.InputTag("reducedEgamma:reducedEERecHits"),
@@ -166,16 +149,20 @@ else :
 # from https://twiki.cern.ch/twiki/bin/view/CMS/EgammaMiniAODV2#2017_MiniAOD_V2%20#https://twiki.cern.ch/twiki/bin/view/CMS/EgammaPostRecoR
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 
-if period is '2016' :
-    labelEra = '2016-Legacy'
-    rerunIDs = True
-    rerunEnergyCorrections = False
-elif period is '2017' :
-    labelEra = '2017-Nov17ReReco'
+if period is 'UL2016' :
+    labelEra = '2016preVFP-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
-elif period is '2018' :
-    labelEra = '2018-Prompt'
+elif period is 'UL2016APV' :
+    labelEra = '2016postVFP-UL'
+    rerunIDs = True
+    rerunEnergyCorrections = True
+elif period is 'UL2017' :
+    labelEra = '2017-UL'
+    rerunIDs = True
+    rerunEnergyCorrections = True
+elif period is 'UL2018' :
+    labelEra = '2018-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
 
@@ -190,7 +177,7 @@ updatedTauName = "NewTauIDsEmbedded" #name of pat::Tau collection with new tau-I
 import RecoTauTag.RecoTau.tools.runTauIdMVA as tauIdConfig
 tauIdEmbedder = tauIdConfig.TauIDEmbedder(process, cms, debug = False,
                                           updatedTauName = updatedTauName,
-                                          toKeep = [ "2017v2", "deepTau2017v2p1","MVADM_2016_v1","MVADM_2017_v1"]
+                                          toKeep = [ "2017v2", "deepTau2017v2p1","MVADM_2017_v1"]
                                           )
 
 tauIdEmbedder.runTauID()
@@ -230,19 +217,19 @@ else :
 
 # Pre-firing weights ==========================================================================================
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/L1ECALPrefiringWeightRecipe
-from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
-if period == "2018" :
-    process.prefiringweight = cms.Sequence()
-else:
-    if period == '2016' :
-        data_era = "2016BtoH"
-    elif period=='2017':
-        data_era = "2017BtoF"
-    process.prefiringweight = l1ECALPrefiringWeightProducer.clone(
-        DataEra = cms.string(data_era),
-        UseJetEMPt = cms.bool(False),
-        PrefiringRateSystematicUncty = cms.double(0.2),
-        SkipWarnings = False)
+#from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
+#if period == "2018" :
+#process.prefiringweight = cms.Sequence()
+#else:
+#    if period == '2016' :
+#        data_era = "2016BtoH"
+#    elif period=='2017':
+#        data_era = "2017BtoF"
+#    process.prefiringweight = l1ECALPrefiringWeightProducer.clone(
+#        DataEra = cms.string(data_era),
+#        UseJetEMPt = cms.bool(False),
+#        PrefiringRateSystematicUncty = cms.double(0.2),
+#        SkipWarnings = False)
 # END Pre-firing weights ======================================================================================
 
 # Trigger list ================================================================================================
@@ -636,7 +623,7 @@ L1JetCollectionTag = cms.InputTag("caloStage2Digis:Jet"),
 JetCollectionTag = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"),
 PuppiJetCollectionTag = cms.InputTag("updatedPatJetsUpdatedJECPuppi::TreeProducer"),
 MetCollectionTag = cms.InputTag("slimmedMETs::@skipCurrentProcess"),
-MetCorrCollectionTag = cms.InputTag("slimmedMETsModifiedMET::TreeProducer"),
+MetCorrCollectionTag = cms.InputTag("slimmedMETs::TreeProducer"),
 PuppiMetCollectionTag = cms.InputTag("slimmedMETsPuppi::TreeProducer"),
 MvaMetCollectionsTag = cms.VInputTag(cms.InputTag("MVAMET","MVAMET","TreeProducer")),
 TrackCollectionTag = cms.InputTag("generalTracks"),
@@ -754,11 +741,13 @@ process.p = cms.Path(
   process.triggerSelection * # trigger filtering
   process.jecSequence *  # New JECs
   process.jecSequencepuppi *  # New JECs
+  process.fullPatMetSequence *  # Re-correcting PFMET
   process.egmPhotonIDSequence * # Puppi MET
   process.puppiMETSequence *  # Puppi MET
+  #process.fullPatMetSequencePuppi *  # Re-correcting Puppi MET
+  #process.fullPatMetSequence *  # Re-correcting PFMET
   process.fullPatMetSequencePuppi *  # Re-correcting Puppi MET
-  process.fullPatMetSequenceModifiedMET *  # Re-correcting PFMET
-  process.ecalBadCalibReducedMINIAODFilter *  # MET filter 2018
+  process.ecalBadCalibReducedMINIAODFilter *  # MET filter 2018, currently nothing
   process.egammaPostRecoSeq *               # electron energy corrections and Ids
   process.rerunMvaIsolationSequence *  # Tau IDs
   getattr(process,updatedTauName) *  # Tau IDs
@@ -766,7 +755,7 @@ process.p = cms.Path(
   process.AdvancedRefitVertexBSSequence * # Vertex refit w/ BS
   process.MiniAODRefitVertexBS * # PV with BS constraint
   process.htxsSequence * # HTXS
-  process.prefiringweight * # prefiring-weights for 2016/2017
+  #process.prefiringweight * # prefiring-weights for 2016/2017
   process.makeroottree
 )
 
