@@ -16,3 +16,19 @@ cd ${CMSSW_BASE}/src
 git clone https://github.com/CMS-HTT/HiggsCPinTauDecays.git
 
 scram b -j 8
+
+cd ${CMSSW_BASE}/src
+git cms-addpkg RecoEgamma/EgammaTools
+git clone https://github.com/cms-egamma/EgammaPostRecoTools.git
+mv EgammaPostRecoTools/python/EgammaPostRecoTools.py RecoEgamma/EgammaTools/python/.
+git clone -b ULSSfiles_correctScaleSysMC https://github.com/jainshilpi/EgammaAnalysis-ElectronTools.git EgammaAnalysis/ElectronTools/data/
+git cms-addpkg EgammaAnalysis/ElectronTools
+
+scram b -j 8
+
+cd ${CMSSW_BASE}/src
+git cms-merge-topic -u cms-tau-pog:CMSSW_10_6_X_tau-pog_MVAdm
+
+scram b -j 16
+scram b -j 16
+
