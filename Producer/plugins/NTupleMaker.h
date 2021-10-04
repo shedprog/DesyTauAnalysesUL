@@ -675,7 +675,8 @@ class NTupleMaker : public edm::EDAnalyzer{
   Bool_t muon_isICHEP[M_muonmaxcount];
   Bool_t muon_isDuplicate[M_muonmaxcount];
   Bool_t muon_isBad[M_muonmaxcount];
-
+  Float_t muon_ttHMVA[M_muonmaxcount];
+  Float_t muon_ttHMVA2016[M_muonmaxcount];
   Bool_t muon_globalTrack[M_muonmaxcount];
   Bool_t muon_innerTrack[M_muonmaxcount];
 
@@ -886,7 +887,8 @@ class NTupleMaker : public edm::EDAnalyzer{
   //Bool_t electron_cutId_loose_Fall17V2[M_electronmaxcount];
   //Bool_t electron_cutId_medium_Fall17V2[M_electronmaxcount];
   //Bool_t electron_cutId_tight_Fall17V2[M_electronmaxcount];
-
+  Float_t electron_ttHMVA[M_electronmaxcount];
+  Float_t electron_ttHMVA2016[M_electronmaxcount];
   Bool_t electron_pass_conversion[M_electronmaxcount];
 
   Int_t electron_genmatch[M_electronmaxcount];

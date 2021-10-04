@@ -492,7 +492,8 @@ void NTupleMaker::beginJob(){
     tree->Branch("muon_genmatch", muon_genmatch, "muon_genmatch[muon_count]/I");
     tree->Branch("muon_isDuplicate",muon_isDuplicate,"muon_isDuplicate[muon_count]/O");
     tree->Branch("muon_isBad",muon_isBad,"muon_isBad[muon_count]/O");
-
+    tree->Branch("muon_ttHMVA",muon_ttHMVA,"muon_ttHMVA[muon_count]/F");
+    tree->Branch("muon_ttHMVA2016",muon_ttHMVA2016,"muon_ttHMVA2016[muon_count]/F");
     /*tree->Branch("dimuon_count", &dimuon_count, "dimuon_count/i");
     tree->Branch("dimuon_leading", dimuon_leading, "dimuon_leading[dimuon_count]/i");
     tree->Branch("dimuon_trailing", dimuon_trailing, "dimuon_trailing[dimuon_count]/i");
@@ -692,6 +693,8 @@ void NTupleMaker::beginJob(){
     //tree->Branch("electron_cutId_tight_Fall17", electron_cutId_tight_Fall17, "electron_cutId_tight_Fall17[electron_count]/O");
     //cut-based Fall17V2
     tree->Branch("electron_cutId_veto_Fall17V2", electron_cutId_veto_Fall17V2, "electron_cutId_veto_Fall17V2[electron_count]/O");
+    tree->Branch("electron_ttHMVA", electron_ttHMVA, "electron_ttHMVA[electron_count]/F");
+    tree->Branch("electron_ttHMVA2016", electron_ttHMVA2016, "electron_ttHMVA2016[electron_count]/F");
     //tree->Branch("electron_cutId_loose_Fall17V2", electron_cutId_loose_Fall17V2, "electron_cutId_loose_Fall17V2[electron_count]/O");
     //tree->Branch("electron_cutId_medium_Fall17V2", electron_cutId_medium_Fall17V2, "electron_cutId_medium_Fall17V2[electron_count]/O");
     //tree->Branch("electron_cutId_tight_Fall17V2", electron_cutId_tight_Fall17V2, "electron_cutId_tight_Fall17V2[electron_count]/O");
@@ -3411,6 +3414,9 @@ unsigned int NTupleMaker::AddMuons(const edm::Event& iEvent, const edm::EventSet
 	muon_isGlobal[muon_count] = (*Muons)[i].isGlobalMuon();
 	muon_isMedium[muon_count] = (*Muons)[i].isMediumMuon();
 
+	muon_ttHMVA[muon_count] = (*Muons)[i].userFloat("muonMVATTH");
+        muon_ttHMVA2016[muon_count] = (*Muons)[i].userFloat("muonMVATTH2016");
+
 	muon_chargedHadIso[muon_count] = (*Muons)[i].chargedHadronIso();
 	muon_neutralHadIso[muon_count] = (*Muons)[i].neutralHadronIso();
 	muon_photonIso[muon_count] = (*Muons)[i].photonIso();
@@ -4870,8 +4876,9 @@ unsigned int NTupleMaker::AddElectrons(const edm::Event& iEvent, const edm::Even
 	  //electron_cutId_medium_Fall17V2[electron_count] = el ->electronID("cutBasedElectronID-Fall17-94X-V2-medium");
 	  //electron_cutId_tight_Fall17V2[electron_count] = el ->electronID("cutBasedElectronID-Fall17-94X-V2-tight");
 	  //ending for 9.4.0 electron id
-
-	  electron_pass_conversion[electron_count] = (*Electrons)[i].passConversionVeto();
+          electron_ttHMVA[electron_count] = (*Electrons)[i].userFloat("electronMVATTH");
+	  electron_ttHMVA2016[electron_count] = (*Electrons)[i].userFloat("electronMVATTH2016");
+          electron_pass_conversion[electron_count] = (*Electrons)[i].passConversionVeto();
 
 	  //	  std::cout << "  passed conversion veto = " << electron_pass_conversion[electron_count] << std::endl;
 
