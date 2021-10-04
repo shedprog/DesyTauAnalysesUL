@@ -2,12 +2,12 @@ import FWCore.ParameterSet.Config as cms
 
 ### NOTE: Please keep the settings for MC 18 when pushing this file to the git repository ###
 # Configurable options =======================================================================
-isData = True
-isSingleMuonData = True # needed to record track collection for NMSSM ananlysis
+isData = False
+isSingleMuonData = False # needed to record track collection for NMSSM ananlysis
 isEmbedded = False # set to true if you run over Z->TauTau embedded samples
 isHiggsSignal = False # Set to true if you run over higgs signal samples -> needed for STXS1p1 flags
-year = 2018 # Options: 2016, 2017, 2018
-period = 'UL2018' # Options: UL2016, UL2016APV, UL2017, UL2018
+year = 2016 # Options: 2016, 2017, 2018
+period = 'UL2016' # Options: UL2016APV, UL2016, UL2017, UL2018
 RunTauSpinnerProducer = False #only do this if you want to calculate tauspinner weights for a sample with two taus and flat tau polarisation
 
 # ============================================================================================
@@ -49,7 +49,7 @@ process.options = cms.untracked.PSet(
 
 # How many events to process
 process.maxEvents = cms.untracked.PSet(
-   input = cms.untracked.int32(1000)
+   input = cms.untracked.int32(100)
 )
 
 # Define the input source
@@ -58,7 +58,14 @@ import FWCore.PythonUtilities.LumiList as LumiList
 process.source = cms.Source("PoolSource",
   fileNames = cms.untracked.vstring(
         #"/store/mc/RunIISummer20UL18MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/120000/001C8DDF-599C-5E45-BF2C-76F887C9ADE9.root" #UL 2018 MC
-        "/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
+        #"/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
+        #"/store/data/Run2017C/SingleMuon/MINIAOD/UL2017_MiniAODv2-v1/140000/1135C9BA-483C-0040-9567-63127B3CD3EE.root" #UL 2017 data
+        #"/store/mc/RunIISummer20UL17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/120000/005B6A7C-B0B1-A745-879B-017FE7933B77.root" #UL2017 MC
+        #"/store/data/Run2016G/SingleMuon/MINIAOD/UL2016_MiniAODv2-v2/120000/001FDE5F-A989-2F48-A280-D4D0F7766D95.root"#UL2016 data
+        "/store/mc/RunIISummer20UL16MiniAODv2/DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/00061BF0-5BB0-524E-A539-0CAAD8579386.root" #UL2016 MC
+        #"/store/data/Run2016C/SingleMuon/MINIAOD/HIPM_UL2016_MiniAODv2-v2/130000/0294890E-E9C3-5340-8061-E6FB0E5E79B3.root" #UL2016APV data
+        #"/store/mc/RunIISummer20UL16MiniAODAPVv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v11-v1/120000/06E6E2D8-C2B5-DB44-B335-EA4410CDBAD5.root"#UL2016APV MC
+        
 	),
   skipEvents = cms.untracked.uint32(0),
   #lumisToProcess = LumiList.LumiList(filename = 'json/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt').getVLuminosityBlockRange()
@@ -145,6 +152,7 @@ else :
 
 ### END MET ===========================================================================================
 
+
 ### Electron ID, scale and smearing =======================================================================
 # from https://twiki.cern.ch/twiki/bin/view/CMS/EgammaMiniAODV2#2017_MiniAOD_V2%20#https://twiki.cern.ch/twiki/bin/view/CMS/EgammaPostRecoR
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
@@ -170,6 +178,105 @@ setupEgammaPostRecoSeq(process,
                        runVID=rerunIDs,
                        runEnergyCorrections=rerunEnergyCorrections,
                        era=labelEra)
+
+
+# prompt lepton MVA ID ===============================================================================================
+from PhysicsTools.NanoAOD.muons_cff import slimmedMuonsUpdated
+from PhysicsTools.NanoAOD.muons_cff import isoForMu
+from PhysicsTools.NanoAOD.muons_cff import ptRatioRelForMu
+from PhysicsTools.NanoAOD.muons_cff import slimmedMuonsWithUserData
+from PhysicsTools.NanoAOD.muons_cff import muonMVATTH
+
+ptRatioRelForMu.srcJet = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer")
+process.slimmedMuonsUpdated = slimmedMuonsUpdated
+process.isoForMu = isoForMu
+process.ptRatioRelForMu = ptRatioRelForMu
+process.slimmedMuonsWithUserData = slimmedMuonsWithUserData
+process.muonMVATTH = muonMVATTH
+
+process.slimmedMuonsWithUserData.src = cms.InputTag("slimmedMuonsUpdated")
+process.slimmedMuonsWithUserData.userFloats = cms.PSet(
+    miniIsoChg = cms.InputTag("isoForMu:miniIsoChg"),
+    miniIsoAll = cms.InputTag("isoForMu:miniIsoAll"),
+    ptRatio = cms.InputTag("ptRatioRelForMu:ptRatio"),
+    ptRel = cms.InputTag("ptRatioRelForMu:ptRel"),
+    jetNDauChargedMVASel = cms.InputTag("ptRatioRelForMu:jetNDauChargedMVASel"),
+    )
+process.slimmedMuonsWithUserData.userIntFromBools = cms.PSet() # Removed
+process.slimmedMuonsWithUserData.userInts = cms.PSet() # Removed
+process.muonMVATTH.src = cms.InputTag("slimmedMuonsWithUserData")
+
+process.muonMVATTH2016 = muonMVATTH.clone(
+    weightFile =  cms.FileInPath("PhysicsTools/NanoAOD/data/mu_BDTG_2016.weights.xml"),
+    name = cms.string("muonMVATTH2016"),
+)
+
+process.slimmedMuonsWithMVA = cms.EDProducer("PATMuonUserDataEmbedder",
+    src = cms.InputTag("slimmedMuonsWithUserData"),
+    userFloats = cms.PSet(
+        muonMVATTH = cms.InputTag("muonMVATTH"),
+        muonMVATTH2016 = cms.InputTag("muonMVATTH2016"),
+        )
+    )
+
+from PhysicsTools.NanoAOD.electrons_cff import isoForEle
+
+if year is '2016' :
+    isoForEle.EAFile_MiniIso = "RecoEgamma/ElectronIdentification/data/Spring15/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_25ns.txt"
+    isoForEle.EAFile_PFIso = "RecoEgamma/ElectronIdentification/data/Summer16/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_80X.txt"
+
+isoForEle.src = cms.InputTag("slimmedElectrons")
+process.isoForEle = isoForEle
+
+from PhysicsTools.NanoAOD.electrons_cff import ptRatioRelForEle
+ptRatioRelForEle.srcJet = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer")
+ptRatioRelForEle.srcLep = cms.InputTag("slimmedElectrons")
+process.ptRatioRelForEle = ptRatioRelForEle
+
+
+slimmedElectronsWithUserData = cms.EDProducer("PATElectronUserDataEmbedder",
+    src = cms.InputTag("slimmedElectrons"),
+    userFloats = cms.PSet(
+        miniIsoChg = cms.InputTag("isoForEle:miniIsoChg"),
+        miniIsoAll = cms.InputTag("isoForEle:miniIsoAll"),
+        PFIsoChg = cms.InputTag("isoForEle:PFIsoChg"),
+        PFIsoAll = cms.InputTag("isoForEle:PFIsoAll"),
+        PFIsoAll04 = cms.InputTag("isoForEle:PFIsoAll04"),
+        ptRatio = cms.InputTag("ptRatioRelForEle:ptRatio"),
+        ptRel = cms.InputTag("ptRatioRelForEle:ptRel"),
+        jetNDauChargedMVASel = cms.InputTag("ptRatioRelForEle:jetNDauChargedMVASel"),
+    ),
+    userCands = cms.PSet(
+        jetForLepJetVar = cms.InputTag("ptRatioRelForEle:jetForLepJetVar") # warning: Ptr is null if no match is found
+    ),
+)
+process.slimmedElectronsWithUserData = slimmedElectronsWithUserData
+
+from PhysicsTools.NanoAOD.electrons_cff import electronMVATTH
+import PhysicsTools.PatAlgos.producersLayer1.electronProducer_cfi
+
+process.electronMVATTH = electronMVATTH
+
+process.electronMVATTH.src = cms.InputTag("slimmedElectronsWithUserData")
+process.electronMVATTH.variables.LepGood_mvaFall17V2noIso =cms.string("userFloat('ElectronMVAEstimatorRun2Fall17NoIsoV2Values')")
+
+process.electronMVATTH2016 = electronMVATTH.clone(
+    weightFile =  cms.FileInPath("PhysicsTools/NanoAOD/data/el_BDTG_2016.weights.xml"),
+    name = cms.string("electronMVATTH2016"),
+)
+
+process.slimmedElectronsWithMVA = cms.EDProducer("PATElectronUserDataEmbedder",
+    src = cms.InputTag("slimmedElectronsWithUserData"),
+    userFloats = cms.PSet(
+        electronMVATTH = cms.InputTag("electronMVATTH"),
+        electronMVATTH2016 = cms.InputTag("electronMVATTH2016"),
+        )
+    )
+
+process.promptleptonMVA_sequence = cms.Sequence(process.slimmedMuonsUpdated * process.isoForMu * process.ptRatioRelForMu * process.slimmedMuonsWithUserData * process.muonMVATTH * process.muonMVATTH2016 * process.slimmedMuonsWithMVA * process.isoForEle * process.ptRatioRelForEle * process.slimmedElectronsWithUserData * process.electronMVATTH * process.electronMVATTH2016 * process.slimmedElectronsWithMVA)
+#prompt lepton MVA ID ending ===============================================================================================
+
+
 # Tau ID ===============================================================================================
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuidePFTauID#Running_of_the_DNN_based_tau_ID
 
@@ -611,8 +718,8 @@ RecJet = cms.untracked.bool(True),
 RecJetPuppi= cms.untracked.bool(True),
 RecHTXS = cms.untracked.bool(isHiggsSignal),
 # collections
-MuonCollectionTag = cms.InputTag("slimmedMuons"),
-ElectronCollectionTag = cms.InputTag("slimmedElectrons"),
+MuonCollectionTag = cms.InputTag("slimmedMuonsWithMVA"), #added prompt muon MVA
+ElectronCollectionTag = cms.InputTag("slimmedElectronsWithMVA"), #added prompt electron MVA
 applyElectronESShift = cms.untracked.bool(not isData or isEmbedded),
 TauCollectionTag = cms.InputTag("NewTauIDsEmbedded"),
 L1MuonCollectionTag = cms.InputTag("gmtStage2Digis:Muon"),
@@ -756,6 +863,7 @@ process.p = cms.Path(
   process.MiniAODRefitVertexBS * # PV with BS constraint
   process.htxsSequence * # HTXS
   #process.prefiringweight * # prefiring-weights for 2016/2017
+  process.promptleptonMVA_sequence *
   process.makeroottree
 )
 
