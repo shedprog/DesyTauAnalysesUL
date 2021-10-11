@@ -147,7 +147,7 @@ NTupleMaker::NTupleMaker(const edm::ParameterSet& iConfig) :
   cFlagsProcesses(iConfig.getUntrackedParameter<vector<string> >("FlagsProcesses")),
   BadChCandFilterToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("BadChargedCandidateFilter"))),
   BadPFMuonFilterToken_(consumes<bool>(iConfig.getParameter<edm::InputTag>("BadPFMuonFilter"))),
-  ecalBadCalibFilterUpdate_token(consumes< bool >(edm::InputTag("ecalBadCalibReducedMINIAODFilter"))),
+  //ecalBadCalibFilterUpdate_token(consumes< bool >(edm::InputTag("ecalBadCalibReducedMINIAODFilter"))),
   //ecalBadCalibFilterUpdate_token(iConfig.getUntrackedParameter<bool>("ecalBadCalibReducedMINIAODFilterTag")),
   //ecalBadCalibFilterUpdate_token(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("ecalBadCalibReducedMINIAODFilterTag"))),
   // muons
@@ -333,7 +333,7 @@ void NTupleMaker::beginJob(){
   tree->Branch("trigger_level1bits", &trigger_level1bits, "trigger_level1bits[8]/b");
   tree->Branch("trigger_level1", &trigger_level1, "trigger_level1[128]/b");
   tree->Branch("trigger_HLT", &trigger_HLT, "trigger_HLT[128]/b");
-  tree->Branch("_passecalBadCalibFilterUpdate",&_passecalBadCalibFilterUpdate,"_passecalBadCalibFilterUpdate/b");
+  //tree->Branch("_passecalBadCalibFilterUpdate",&_passecalBadCalibFilterUpdate,"_passecalBadCalibFilterUpdate/b");
   // beam spot
   if (cbeamspot) {
     tree->Branch("beamspot_x", &beamspot_x, "beamspot_x/F");
@@ -1817,11 +1817,11 @@ void NTupleMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   }
   //int _passecalBadCalibFilterUpdate;// = 0;
 
-  if(cYear == 2018){
-    edm::Handle< bool > passecalBadCalibFilterUpdate ;
-    iEvent.getByToken(ecalBadCalibFilterUpdate_token,passecalBadCalibFilterUpdate);
-    _passecalBadCalibFilterUpdate = *passecalBadCalibFilterUpdate;
-  }
+  //if(cYear == 2018){
+  //  edm::Handle< bool > passecalBadCalibFilterUpdate ;
+  //  iEvent.getByToken(ecalBadCalibFilterUpdate_token,passecalBadCalibFilterUpdate);
+  //  _passecalBadCalibFilterUpdate = *passecalBadCalibFilterUpdate;
+  //}
 
   if(cbeamspot)
     {

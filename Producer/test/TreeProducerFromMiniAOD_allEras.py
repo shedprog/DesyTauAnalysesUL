@@ -2,12 +2,12 @@ import FWCore.ParameterSet.Config as cms
 
 ### NOTE: Please keep the settings for MC 18 when pushing this file to the git repository ###
 # Configurable options =======================================================================
-isData = False
-isSingleMuonData = False # needed to record track collection for NMSSM ananlysis
+isData = True
+isSingleMuonData = True # needed to record track collection for NMSSM ananlysis
 isEmbedded = False # set to true if you run over Z->TauTau embedded samples
 isHiggsSignal = False # Set to true if you run over higgs signal samples -> needed for STXS1p1 flags
-year = 2016 # Options: 2016, 2017, 2018
-period = 'UL2016' # Options: UL2016APV, UL2016, UL2017, UL2018
+year = 2018 # Options: 2016, 2017, 2018
+period = 'UL2018' # Options: UL2016APV, UL2016, UL2017, UL2018
 RunTauSpinnerProducer = False #only do this if you want to calculate tauspinner weights for a sample with two taus and flat tau polarisation
 
 # ============================================================================================
@@ -58,11 +58,11 @@ import FWCore.PythonUtilities.LumiList as LumiList
 process.source = cms.Source("PoolSource",
   fileNames = cms.untracked.vstring(
         #"/store/mc/RunIISummer20UL18MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/120000/001C8DDF-599C-5E45-BF2C-76F887C9ADE9.root" #UL 2018 MC
-        #"/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
+        "/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
         #"/store/data/Run2017C/SingleMuon/MINIAOD/UL2017_MiniAODv2-v1/140000/1135C9BA-483C-0040-9567-63127B3CD3EE.root" #UL 2017 data
         #"/store/mc/RunIISummer20UL17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/120000/005B6A7C-B0B1-A745-879B-017FE7933B77.root" #UL2017 MC
         #"/store/data/Run2016G/SingleMuon/MINIAOD/UL2016_MiniAODv2-v2/120000/001FDE5F-A989-2F48-A280-D4D0F7766D95.root"#UL2016 data
-        "/store/mc/RunIISummer20UL16MiniAODv2/DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/00061BF0-5BB0-524E-A539-0CAAD8579386.root" #UL2016 MC
+        #"/store/mc/RunIISummer20UL16MiniAODv2/DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/00061BF0-5BB0-524E-A539-0CAAD8579386.root" #UL2016 MC
         #"/store/data/Run2016C/SingleMuon/MINIAOD/HIPM_UL2016_MiniAODv2-v2/130000/0294890E-E9C3-5340-8061-E6FB0E5E79B3.root" #UL2016APV data
         #"/store/mc/RunIISummer20UL16MiniAODAPVv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v11-v1/120000/06E6E2D8-C2B5-DB44-B335-EA4410CDBAD5.root"#UL2016APV MC
         
@@ -124,34 +124,6 @@ runMetCorAndUncFromMiniAOD(process,
 # Re-calculation of Puppi weights only needed if the latest Tune (v11) was not applied on MiniAOD yet (see here: https://twiki.cern.ch/twiki/bin/view/CMS/PUPPI#PUPPI_Status_Release_notes)
 process.puppiNoLep.useExistingWeights = True
 process.puppi.useExistingWeights = True
-
-# MET filter for 2018 (from : https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#How_to_run_ecal_BadCalibReducedM)//Dummy for UL at the moment
-process.load('RecoMET.METFilters.ecalBadCalibFilter_cfi')
-baddetEcallist = cms.vuint32(
-                             [872439604,872422825,872420274,872423218,
-                              872423215,872416066,872435036,872439336,
-                              872420273,872436907,872420147,872439731,
-                              872436657,872420397,872439732,872439339,
-                              872439603,872422436,872439861,872437051,
-                              872437052,872420649,872422436,872421950,
-                              872437185,872422564,872421566,872421695,
-                              872421955,872421567,872437184,872421951,
-                              872421694,872437056,872437057,872437313])
-
-if period == "UL2018" or period == "UL2017" or period == "UL2016" or period == "UL2016APV":
-    process.ecalBadCalibReducedMINIAODFilter = cms.EDFilter(
-        "EcalBadCalibFilter",
-        EcalRecHitSource = cms.InputTag("reducedEgamma:reducedEERecHits"),
-        ecalMinEt        = cms.double(50.),
-        baddetEcal    = baddetEcallist,
-        taggingMode = cms.bool(True),
-        debug = cms.bool(False)
-        )
-else :
-    process.ecalBadCalibReducedMINIAODFilter = cms.Sequence( )
-
-### END MET ===========================================================================================
-
 
 ### Electron ID, scale and smearing =======================================================================
 # from https://twiki.cern.ch/twiki/bin/view/CMS/EgammaMiniAODV2#2017_MiniAOD_V2%20#https://twiki.cern.ch/twiki/bin/view/CMS/EgammaPostRecoR
@@ -221,7 +193,7 @@ process.slimmedMuonsWithMVA = cms.EDProducer("PATMuonUserDataEmbedder",
 
 from PhysicsTools.NanoAOD.electrons_cff import isoForEle
 
-if year is '2016' :
+if year is 2016 :
     isoForEle.EAFile_MiniIso = "RecoEgamma/ElectronIdentification/data/Spring15/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_25ns.txt"
     isoForEle.EAFile_PFIso = "RecoEgamma/ElectronIdentification/data/Summer16/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_80X.txt"
 
@@ -751,17 +723,19 @@ htxsInfo = cms.InputTag("rivetProducerHTXS", "HiggsClassification"),
 HLTriggerPaths = HLTlist,
 TriggerProcess = cms.untracked.string(triggerLabel),
 Flags = cms.untracked.vstring(
-  'Flag_HBHENoiseFilter',
-  'Flag_HBHENoiseIsoFilter',
-  'Flag_CSCTightHalo2015Filter',
-  'Flag_EcalDeadCellTriggerPrimitiveFilter',
-  'Flag_goodVertices',
-  'Flag_eeBadScFilter',
-  'Flag_chargedHadronTrackResolutionFilter',
-  'Flag_muonBadTrackFilter',
-  'Flag_globalTightHalo2016Filter',
-  'Flag_METFilters',
-  'allMetFilterPaths'
+'Flag_goodVertices',
+'Flag_globalSuperTightHalo2016Filter',
+'Flag_HBHENoiseFilter',
+'Flag_HBHENoiseIsoFilter',
+'Flag_EcalDeadCellTriggerPrimitiveFilter',
+'Flag_BadPFMuonFilter',
+'Flag_BadPFMuonDzFilter',
+'Flag_hfNoisyHitsFilter',
+'Flag_BadChargedCandidateFilter',
+'Flag_eeBadScFilter',
+'Flag_ecalBadCalibFilter',
+'Flag_METFilters',
+'allMetFilterPaths',
 ),
 FlagsProcesses = cms.untracked.vstring("RECO","PAT"),
 BadChargedCandidateFilter =  cms.InputTag("BadChargedCandidateFilter"),
@@ -854,7 +828,6 @@ process.p = cms.Path(
   #process.fullPatMetSequencePuppi *  # Re-correcting Puppi MET
   #process.fullPatMetSequence *  # Re-correcting PFMET
   process.fullPatMetSequencePuppi *  # Re-correcting Puppi MET
-  process.ecalBadCalibReducedMINIAODFilter *  # MET filter 2018, currently nothing
   process.egammaPostRecoSeq *               # electron energy corrections and Ids
   process.rerunMvaIsolationSequence *  # Tau IDs
   getattr(process,updatedTauName) *  # Tau IDs
