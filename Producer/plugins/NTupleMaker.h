@@ -513,7 +513,7 @@ class NTupleMaker : public edm::EDAnalyzer{
   UChar_t trigger_level1bits[8];
   UChar_t trigger_level1[128];
   UChar_t trigger_HLT[128];
-  Bool_t _passecalBadCalibFilterUpdate;
+  //Bool_t _passecalBadCalibFilterUpdate;
   // beam spot
   Float_t beamspot_x;
   Float_t beamspot_y;
