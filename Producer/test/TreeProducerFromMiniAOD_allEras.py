@@ -129,11 +129,11 @@ process.puppi.useExistingWeights = True
 # from https://twiki.cern.ch/twiki/bin/view/CMS/EgammaMiniAODV2#2017_MiniAOD_V2%20#https://twiki.cern.ch/twiki/bin/view/CMS/EgammaPostRecoR
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 
-if period is 'UL2016' :
+if period is 'UL2016APV' :
     labelEra = '2016preVFP-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
-elif period is 'UL2016APV' :
+elif period is 'UL2016' :
     labelEra = '2016postVFP-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
