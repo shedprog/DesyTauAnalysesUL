@@ -188,6 +188,17 @@ NTupleMaker::NTupleMaker(const edm::ParameterSet& iConfig) :
   prefweight_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProb"))),
   prefweightup_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbUp"))),
   prefweightdown_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbDown"))),
+  prefweightECAL_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbECAL"))),
+  prefweightupECAL_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbECALUp"))),
+  prefweightdownECAL_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbECALDown"))),
+  prefweightMuon_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbMuon"))),
+  prefweightupMuon_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbMuonUp"))),
+  prefweightdownMuon_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbMuonDown"))),
+  prefweightupMuonSyst_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbMuonSystUp"))),
+  prefweightdownMuonSyst_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbMuonSystDown"))),
+  prefweightupMuonStat_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbMuonStatUp"))),
+  prefweightdownMuonStat_token(consumes< double >(edm::InputTag("prefiringweight:nonPrefiringProbMuonStatDown"))),
+
   // collections
   MuonCollectionToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("MuonCollectionTag"))),
   BadGlobalMuonsToken_(consumes<edm::PtrVector<reco::Muon>>(iConfig.getParameter<edm::InputTag>("BadGlobalMuons"))),
@@ -1263,7 +1274,18 @@ void NTupleMaker::beginJob(){
   tree->Branch("prefiringweight", &prefiringweight, "prefiringweight/F");
   tree->Branch("prefiringweightup", &prefiringweightup, "prefiringweightup/F");
   tree->Branch("prefiringweightdown", &prefiringweightdown, "prefiringweightdown/F");
-
+    
+  tree->Branch("prefiringweightECAL", &prefiringweightECAL, "prefiringweightECAL/F");
+  tree->Branch("prefiringweightECALup", &prefiringweightECALup, "prefiringweightECALup/F");
+  tree->Branch("prefiringweightECALdown", &prefiringweightECALdown, "prefiringweightECALdown/F");
+  tree->Branch("prefiringweightMuon", &prefiringweightMuon, "prefiringweightMuon/F");
+  tree->Branch("prefiringweightMuonup", &prefiringweightMuonup, "prefiringweightMuonup/F");
+  tree->Branch("prefiringweightMuondown", &prefiringweightMuondown, "prefiringweightMuondown/F");
+  tree->Branch("prefiringweightMuonSystup", &prefiringweightMuonSystup, "prefiringweightMuonSystup/F");
+  tree->Branch("prefiringweightMuonSystdown", &prefiringweightMuonSystdown, "prefiringweightMuonSystdown/F");
+  tree->Branch("prefiringweightMuonStatup", &prefiringweightMuonStatup, "prefiringweightMuonStatup/F");
+  tree->Branch("prefiringweightMuonStatdown", &prefiringweightMuonStatdown, "prefiringweightMuonStatdown/F");
+      
   lumitree = FS->make<TTree>("AC1Blumi", "AC1Blumi", 1);
   lumitree->Branch("lumi_run", &lumi_run, "lumi_run/i");
   lumitree->Branch("lumi_block", &lumi_block, "lumi_block/i");
@@ -2629,11 +2651,20 @@ void NTupleMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       //      std::cout << std::endl;
     } // ctrigger
 
-  prefiringweight = 1.;
-  prefiringweightup = 1.;
-  prefiringweightdown = 1.;
+    prefiringweight = 1.;
+    prefiringweightup = 1.;
+    prefiringweightdown = 1.;
+    prefiringweightECAL = 1.;
+    prefiringweightECALup = 1.;
+    prefiringweightECALdown = 1.;
+    prefiringweightMuon = 1.;
+    prefiringweightMuonup = 1.;
+    prefiringweightMuondown = 1.;
+    prefiringweightMuonSystup = 1.;
+    prefiringweightMuonSystdown = 1.;
+    prefiringweightMuonStatup = 1.;
+    prefiringweightMuonStatdown = 1.;
 
-  if( cYear != 2018) {
     edm::Handle< double > theprefweight;
     iEvent.getByToken(prefweight_token, theprefweight ) ;
     prefiringweight =(*theprefweight);
@@ -2645,7 +2676,47 @@ void NTupleMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     edm::Handle< double > theprefweightdown;
     iEvent.getByToken(prefweightdown_token, theprefweightdown ) ;
     prefiringweightdown =(*theprefweightdown);
-  }
+    
+    edm::Handle< double > theprefweightECAL;
+    iEvent.getByToken(prefweightECAL_token, theprefweightECAL ) ;
+    prefiringweightECAL =(*theprefweightECAL);
+
+    edm::Handle< double > theprefweightupECAL;
+    iEvent.getByToken(prefweightupECAL_token, theprefweightupECAL ) ;
+    prefiringweightECALup =(*theprefweightupECAL);
+
+    edm::Handle< double > theprefweightdownECAL;
+    iEvent.getByToken(prefweightdownECAL_token, theprefweightdownECAL ) ;
+    prefiringweightECALdown =(*theprefweightdownECAL);
+
+    edm::Handle< double > theprefweightMuon;
+    iEvent.getByToken(prefweightMuon_token, theprefweightMuon ) ;
+    prefiringweightMuon =(*theprefweightMuon);
+
+    edm::Handle< double > theprefweightupMuon;
+    iEvent.getByToken(prefweightupMuon_token, theprefweightupMuon ) ;
+    prefiringweightMuonup =(*theprefweightupMuon);
+
+    edm::Handle< double > theprefweightdownMuon;
+    iEvent.getByToken(prefweightdownMuon_token, theprefweightdownMuon ) ;
+    prefiringweightMuondown =(*theprefweightdownMuon);
+    
+    edm::Handle< double > theprefweightupMuonSyst;
+    iEvent.getByToken(prefweightupMuonSyst_token, theprefweightupMuonSyst ) ;
+    prefiringweightMuonSystup =(*theprefweightupMuonSyst);
+
+    edm::Handle< double > theprefweightdownMuonSyst;
+    iEvent.getByToken(prefweightdownMuonSyst_token, theprefweightdownMuonSyst ) ;
+    prefiringweightMuonSystdown =(*theprefweightdownMuonSyst);
+
+    edm::Handle< double > theprefweightupMuonStat;
+    iEvent.getByToken(prefweightupMuonStat_token, theprefweightupMuonStat ) ;
+    prefiringweightMuonStatup =(*theprefweightupMuonStat);
+
+    edm::Handle< double > theprefweightdownMuonStat;
+    iEvent.getByToken(prefweightdownMuonStat_token, theprefweightdownMuonStat ) ;
+    prefiringweightMuonStatdown =(*theprefweightdownMuonStat);
+
 
   if(crecstxs)
     {

@@ -416,6 +416,17 @@ class NTupleMaker : public edm::EDAnalyzer{
   edm::EDGetTokenT< double > prefweight_token;
   edm::EDGetTokenT< double > prefweightup_token;
   edm::EDGetTokenT< double > prefweightdown_token;
+  edm::EDGetTokenT< double > prefweightECAL_token;
+  edm::EDGetTokenT< double > prefweightupECAL_token;
+  edm::EDGetTokenT< double > prefweightdownECAL_token;
+
+  edm::EDGetTokenT< double > prefweightMuon_token;
+  edm::EDGetTokenT< double > prefweightupMuon_token;
+  edm::EDGetTokenT< double > prefweightdownMuon_token;
+  edm::EDGetTokenT< double > prefweightupMuonSyst_token;
+  edm::EDGetTokenT< double > prefweightdownMuonSyst_token;
+  edm::EDGetTokenT< double > prefweightupMuonStat_token;
+  edm::EDGetTokenT< double > prefweightdownMuonStat_token;
   edm::EDGetTokenT<pat::MuonCollection> MuonCollectionToken_;
   edm::EDGetTokenT<edm::PtrVector<reco::Muon>> BadGlobalMuonsToken_;
   edm::EDGetTokenT<edm::PtrVector<reco::Muon>> BadDuplicateMuonsToken_;
@@ -1408,6 +1419,17 @@ class NTupleMaker : public edm::EDAnalyzer{
   Float_t prefiringweight;
   Float_t prefiringweightup;
   Float_t prefiringweightdown;
+    
+  Float_t prefiringweightECAL;
+  Float_t prefiringweightECALup;
+  Float_t prefiringweightECALdown;
+  Float_t prefiringweightMuon;
+  Float_t prefiringweightMuonup;
+  Float_t prefiringweightMuondown;
+  Float_t prefiringweightMuonSystup;
+  Float_t prefiringweightMuonSystdown;
+  Float_t prefiringweightMuonStatup;
+  Float_t prefiringweightMuonStatdown;
   //std::vector< double > embeddingWeights_; //for RhEmb
   Double_t TauSpinnerWeight[M_tauspinneranglesmaxcount];
   UInt_t TauSpinAngles_count;

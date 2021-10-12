@@ -3,8 +3,8 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 
 export SCRAM_ARCH=slc7_amd64_gcc700
 
-cmsrel CMSSW_10_6_20
-cd CMSSW_10_6_20/src
+cmsrel CMSSW_10_6_26
+cd CMSSW_10_6_26/src
 cmsenv
 
 git cms-init
@@ -27,7 +27,6 @@ git cms-addpkg EgammaAnalysis/ElectronTools
 scram b -j 8
 
 cd ${CMSSW_BASE}/src
-git cms-merge-topic -u cms-tau-pog:CMSSW_10_6_X_tau-pog_MVAdm
 
 scram b -j 16
 scram b -j 16

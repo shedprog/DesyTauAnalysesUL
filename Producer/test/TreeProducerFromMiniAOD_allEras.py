@@ -2,12 +2,12 @@ import FWCore.ParameterSet.Config as cms
 
 ### NOTE: Please keep the settings for MC 18 when pushing this file to the git repository ###
 # Configurable options =======================================================================
-isData = True
-isSingleMuonData = True # needed to record track collection for NMSSM ananlysis
+isData = False
+isSingleMuonData = False # needed to record track collection for NMSSM ananlysis
 isEmbedded = False # set to true if you run over Z->TauTau embedded samples
 isHiggsSignal = False # Set to true if you run over higgs signal samples -> needed for STXS1p1 flags
-year = 2018 # Options: 2016, 2017, 2018
-period = 'UL2018' # Options: UL2016APV, UL2016, UL2017, UL2018
+year = 2016 # Options: 2016, 2017, 2018
+period = 'UL2016' # Options: UL2016APV, UL2016, UL2017, UL2018
 RunTauSpinnerProducer = False #only do this if you want to calculate tauspinner weights for a sample with two taus and flat tau polarisation
 
 # ============================================================================================
@@ -58,11 +58,11 @@ import FWCore.PythonUtilities.LumiList as LumiList
 process.source = cms.Source("PoolSource",
   fileNames = cms.untracked.vstring(
         #"/store/mc/RunIISummer20UL18MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/120000/001C8DDF-599C-5E45-BF2C-76F887C9ADE9.root" #UL 2018 MC
-        "/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
+        #"/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
         #"/store/data/Run2017C/SingleMuon/MINIAOD/UL2017_MiniAODv2-v1/140000/1135C9BA-483C-0040-9567-63127B3CD3EE.root" #UL 2017 data
         #"/store/mc/RunIISummer20UL17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/120000/005B6A7C-B0B1-A745-879B-017FE7933B77.root" #UL2017 MC
         #"/store/data/Run2016G/SingleMuon/MINIAOD/UL2016_MiniAODv2-v2/120000/001FDE5F-A989-2F48-A280-D4D0F7766D95.root"#UL2016 data
-        #"/store/mc/RunIISummer20UL16MiniAODv2/DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/00061BF0-5BB0-524E-A539-0CAAD8579386.root" #UL2016 MC
+        "/store/mc/RunIISummer20UL16MiniAODv2/DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/00061BF0-5BB0-524E-A539-0CAAD8579386.root" #UL2016 MC
         #"/store/data/Run2016C/SingleMuon/MINIAOD/HIPM_UL2016_MiniAODv2-v2/130000/0294890E-E9C3-5340-8061-E6FB0E5E79B3.root" #UL2016APV data
         #"/store/mc/RunIISummer20UL16MiniAODAPVv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v11-v1/120000/06E6E2D8-C2B5-DB44-B335-EA4410CDBAD5.root"#UL2016APV MC
         
@@ -256,7 +256,7 @@ updatedTauName = "NewTauIDsEmbedded" #name of pat::Tau collection with new tau-I
 import RecoTauTag.RecoTau.tools.runTauIdMVA as tauIdConfig
 tauIdEmbedder = tauIdConfig.TauIDEmbedder(process, cms, debug = False,
                                           updatedTauName = updatedTauName,
-                                          toKeep = [ "2017v2", "deepTau2017v2p1","MVADM_2017_v1"]
+                                          toKeep = [ "2017v2", "deepTau2017v2p1"]#,"MVADM_2017_v1"]
                                           )
 
 tauIdEmbedder.runTauID()
@@ -295,20 +295,44 @@ else :
 
 
 # Pre-firing weights ==========================================================================================
-# https://twiki.cern.ch/twiki/bin/viewauth/CMS/L1ECALPrefiringWeightRecipe
-#from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
-#if period == "2018" :
-#process.prefiringweight = cms.Sequence()
-#else:
-#    if period == '2016' :
-#        data_era = "2016BtoH"
-#    elif period=='2017':
-#        data_era = "2017BtoF"
-#    process.prefiringweight = l1ECALPrefiringWeightProducer.clone(
-#        DataEra = cms.string(data_era),
-#        UseJetEMPt = cms.bool(False),
-#        PrefiringRateSystematicUncty = cms.double(0.2),
-#        SkipWarnings = False)
+# https://twiki.cern.ch/twiki/bin/viewauth/CMS/L1PrefiringWeightRecipe#Recipe_details_10_6_X_X_26_or_12
+from PhysicsTools.PatUtils.l1PrefiringWeightProducer_cfi import l1PrefiringWeightProducer
+if period is 'UL2018':
+    process.prefiringweight = l1PrefiringWeightProducer.clone(
+    TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
+    DataEraECAL = cms.string("None"),
+    DataEraMuon = cms.string("20172018"),
+    UseJetEMPt = cms.bool(False),
+    PrefiringRateSystematicUnctyECAL = cms.double(0.2),
+    PrefiringRateSystematicUnctyMuon = cms.double(0.2)
+    )
+elif period is 'UL2017':
+    process.prefiringweight = l1PrefiringWeightProducer.clone(
+    TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
+    DataEraECAL = cms.string("UL2017BtoF"),
+    DataEraMuon = cms.string("20172018"),
+    UseJetEMPt = cms.bool(False),
+    PrefiringRateSystematicUnctyECAL = cms.double(0.2),
+    PrefiringRateSystematicUnctyMuon = cms.double(0.2)
+    )
+elif period is 'UL2016':
+    process.prefiringweight = l1PrefiringWeightProducer.clone(
+    TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
+    DataEraECAL = cms.string("UL2016postVFP"),
+    DataEraMuon = cms.string("2016postVFP"),
+    UseJetEMPt = cms.bool(False),
+    PrefiringRateSystematicUnctyECAL = cms.double(0.2),
+    PrefiringRateSystematicUnctyMuon = cms.double(0.2)
+    )
+elif period is 'UL2016APV':
+    process.prefiringweight = l1PrefiringWeightProducer.clone(
+    TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
+    DataEraECAL = cms.string("UL2016preVFP"),
+    DataEraMuon = cms.string("2016preVFP"),
+    UseJetEMPt = cms.bool(False),
+    PrefiringRateSystematicUnctyECAL = cms.double(0.2),
+    PrefiringRateSystematicUnctyMuon = cms.double(0.2)
+    )
 # END Pre-firing weights ======================================================================================
 
 # Trigger list ================================================================================================
@@ -835,7 +859,7 @@ process.p = cms.Path(
   process.AdvancedRefitVertexBSSequence * # Vertex refit w/ BS
   process.MiniAODRefitVertexBS * # PV with BS constraint
   process.htxsSequence * # HTXS
-  #process.prefiringweight * # prefiring-weights for 2016/2017
+  process.prefiringweight * # prefiring-weights
   process.promptleptonMVA_sequence *
   process.makeroottree
 )
