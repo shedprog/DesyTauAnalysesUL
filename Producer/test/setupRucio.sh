@@ -1,5 +1,5 @@
 #!/bin/bash
-CERNUSER=acardini
+CERNUSER=
 
 if test -z "$CERNUSER" ; then
     echo "Setup your CERN username first, please look at the README.md"
