@@ -11,8 +11,8 @@ git clone https://github.com/grid-control/grid-control.git
 ```
 
 You will also have to setup [Rucio]() to access the miniAODs and run the NTuple production.
-Please add you CERN username in `Producer/test/setupRucio.sh` and then execute it with `bash setupRucio.sh`.
-
+Please add you CERN username in `Producer/test/setupRucio.sh` and then execute it with `source setupRucio.sh`.
+NOTE: do NOT set up your CMS environment before running `source setupRucio.sh`, the default python libraries of CMSSW are in conflict with the one used by Rucio.
 
 
 ## Running NTuple Production
@@ -20,7 +20,7 @@ Please add you CERN username in `Producer/test/setupRucio.sh` and then execute i
 The main script you will use is `/path/to/grid-control/go.py`.
 
 First you need to create a list of files from cms-das on which grid-control will act.
-This can be done using the script `Producer/python/read_filelist_from_das.py`, to run it use:
+This can be done using the script `Producer/test/read_filelist_from_das.py`, to run it use:
 ```bash
 python read_filelist_from_das.py --nick <nickname of dataset> --query </DATASET-NAME/CAMPAIGN/MINIAODSIM(MINIAOD/USER)> --outputfile <my_list>
 ```
