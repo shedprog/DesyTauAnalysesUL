@@ -7,7 +7,7 @@ Corresponding framework is an updated and refactored version of the DESY Tau ana
 ## Install
 In order to install framework with required CMSSW dependencies:
 ```sh
-> wget https://raw.githubusercontent.com/DesyTau/DesyTauAnalysesUL/main/setup.sh
-> chmod 755 setup.sh
-> ./setup.sh
+wget https://raw.githubusercontent.com/DesyTau/DesyTauAnalysesUL/main/setup.sh
+chmod 755 setup.sh
+./setup.sh
 ```
