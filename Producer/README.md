@@ -7,7 +7,7 @@ This setup runs on miniAOD ntuples and uses [grid-control](https://github.com/gr
 To run the NTupleMaker on the batch system we recommend the use of [grid-control](https://github.com/grid-control/grid-control).
 Please set up grid-control outside your CMSSW area.
 ```bash
-git clone https://github.com/grid-control/grid-control.git
+git clone https://github.com/grid-control/grid-control.git -b testing
 ```
 
 You will also have to setup [Rucio]() to access the miniAODs and run the NTuple production.
@@ -31,7 +31,7 @@ The config files are named `gc_DATA.cfg` and `gc_MC.cfg`, the areas to be edited
 * `se path`: Path to storage area, simply put the full path to store on nfs or `srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/<username>/<path to storage area>`
 * `dbs instance`: The default location is `prod/global`, to switch to phys03 or other production instances uncomment this option and specify the type of instance used for the desired datasets
 * `project area`: Input full path to your CMSSW area
-* `dataset`: to use a file list provided with Rucio use `Datasetname: list:<full path to file list>`
+* `dataset`: to use a file list provided with Rucio use `<nickname of dataset>: list:<full path to file list>`
 * `nickname config`: python config file (`TreeProducer.py`) to be used for production.
 * `nickname lumi filter`: Json lumi file turned into txt format, to be used when running on DATA.
 
