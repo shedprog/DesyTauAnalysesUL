@@ -45,7 +45,7 @@ The `attach user` instruction can be executed again for different datasets, in o
 
 
 
- a list of files from cms-das on which grid-control will act.
+Second: create a list of files from cms-das on which grid-control will act.
 This can be done using the script `Producer/test/read_filelist_from_das.py`, to run it use:
 ```bash
 python read_filelist_from_das.py --nick <nickname of dataset> --query </DATASET-NAME/CAMPAIGN/MINIAODSIM(MINIAOD/USER)> --outputfile <my_list>
