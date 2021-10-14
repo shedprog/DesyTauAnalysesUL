@@ -19,7 +19,33 @@ NOTE: do NOT set up your CMS environment before running `source setupRucio.sh`, 
 
 The main script you will use is `/path/to/grid-control/go.py`.
 
-First you need to create a list of files from cms-das on which grid-control will act.
+First you need to check that the datasets are correctly stored in T2_DE_DESY with Rucio.
+NOTE: You need to NOT have set up your CMSSW environment for this or there will be conflicts with the python library used by Rucio.
+The script `Producer/test/rucio_transfer.sh` can be used for transfering one dataset at a time, it can be executed with:
+```bash
+./rucio_transfer.sh <nickname of dataset> </DATASET-NAME/CAMPAIGN/MINIAODSIM(MINIAOD/USER)>
+```
+The script can easily be edited in order to attach multiple datasets to the same Rucio container and request the transfer of multiple datasets at once:
+```bash
+#!/bin/bash
+NICK=$1
+DATASET=$2
+#Uncomment the following lines to add multiple datasets to the same container and request only one transfer
+#DATASET_2=$3
+#DATASET_3=$4
+
+rucio add-container user.${RUCIO_ACCOUNT}:/Analyses/$NICK/USER 
+rucio attach user.${RUCIO_ACCOUNT}:/Analyses/$NICK/USER cms:$DATASET
+#rucio attach user.${RUCIO_ACCOUNT}:/Analyses/$NICK/USER cms:$DATASET_2
+#rucio attach user.${RUCIO_ACCOUNT}:/Analyses/$NICK/USER cms:$DATASET_3
+rucio add-rule --ask-approval user.${RUCIO_ACCOUNT}:/Analyses/$NICK/USER 1 T2_DE_DESY --lifetime 2592000 --asynchronous
+
+```
+The `attach user` instruction can be executed again for different datasets, in order to attach them to the same container.
+
+
+
+ a list of files from cms-das on which grid-control will act.
 This can be done using the script `Producer/test/read_filelist_from_das.py`, to run it use:
 ```bash
 python read_filelist_from_das.py --nick <nickname of dataset> --query </DATASET-NAME/CAMPAIGN/MINIAODSIM(MINIAOD/USER)> --outputfile <my_list>
