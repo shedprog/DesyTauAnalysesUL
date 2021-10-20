@@ -1,9 +1,9 @@
 #ifndef TauAnalysis_CandidateTools_NSVfitStandaloneAlgorithm_h
 #define TauAnalysis_CandidateTools_NSVfitStandaloneAlgorithm_h
 
-#include "DesyTauAnalysesUL/Common/interface/NSVfitStandaloneLikelihood.h"
-#include "DesyTauAnalysesUL/Common/interface/MarkovChainIntegrator.h"
-#include "DesyTauAnalysesUL/Common/interface/svFitAuxFunctions.h"
+#include "DesyTauAnalyses/Common/interface/NSVfitStandaloneLikelihood.h"
+#include "DesyTauAnalyses/Common/interface/MarkovChainIntegrator.h"
+#include "DesyTauAnalyses/Common/interface/svFitAuxFunctions.h"
 
 #include <TMath.h>
 #include <TArrayF.h>

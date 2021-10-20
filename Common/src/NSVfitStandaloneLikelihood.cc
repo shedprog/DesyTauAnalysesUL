@@ -1,6 +1,6 @@
-#include "DesyTauAnalysesUL/Common/interface/svFitAuxFunctions.h"
-#include "DesyTauAnalysesUL/Common/interface/LikelihoodFunctions.h"
-#include "DesyTauAnalysesUL/Common/interface/NSVfitStandaloneLikelihood.h"
+#include "DesyTauAnalyses/Common/interface/svFitAuxFunctions.h"
+#include "DesyTauAnalyses/Common/interface/LikelihoodFunctions.h"
+#include "DesyTauAnalyses/Common/interface/NSVfitStandaloneLikelihood.h"
 
 using namespace NSVfitStandalone;
 using namespace SVfit_namespace;

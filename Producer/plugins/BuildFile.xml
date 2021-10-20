@@ -31,10 +31,10 @@
 <use   name="EgammaAnalysis/ElectronTools"/>
 <use   name="RecoBTag/BTagTools"/>
 <use   name="RecoVertex/KinematicFitPrimitives"/>
-<use   name="DesyTauAnalysesUL/Common"/>
+<use   name="DesyTauAnalyses/Common"/>
 <use   name="clhep"/>
 <use   name="RecoVertex/AdaptiveVertexFit"/>
-<use   name="DesyTauAnalysesUL/Producer"/>
+<use   name="DesyTauAnalyses/Producer"/>
 <use   name="root"/>
 <flags   CXXFLAGS="-Wno-unused-variable -Wno-error=unused-but-set-variable -fpermissive" />
 </library>

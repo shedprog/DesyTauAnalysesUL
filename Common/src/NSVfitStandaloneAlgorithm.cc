@@ -2,8 +2,8 @@
 #include "Math/Functor.h"
 #include "Math/GSLMCIntegrator.h"
 
-#include "DesyTauAnalysesUL/Common/interface/svFitAuxFunctions.h"
-#include "DesyTauAnalysesUL/Common/interface/NSVfitStandaloneAlgorithm.h"
+#include "DesyTauAnalyses/Common/interface/svFitAuxFunctions.h"
+#include "DesyTauAnalyses/Common/interface/NSVfitStandaloneAlgorithm.h"
 
 namespace NSVfitStandalone
 {

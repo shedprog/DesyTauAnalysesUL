@@ -12,7 +12,7 @@
 <use   name="CondFormats/BTauObjects"/>
 <use   name="CondTools/BTau"/>
 <use   name="HiggsCPinTauDecays/IpCorrection"/>
-<use   name="DesyTauAnalysesUL/Common"/>
+<use   name="DesyTauAnalyses/Common"/>
 <export>
   <lib   name="1"/>
 </export>
