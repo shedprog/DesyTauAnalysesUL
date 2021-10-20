@@ -10,7 +10,7 @@ cmsenv
 git cms-init
 
 cd ${CMSSW_BASE}/src
-git clone https://github.com/DesyTau/DesyTauAnalysesUL
+git clone https://github.com/DesyTau/DesyTauAnalysesUL DesyTauAnalyses
 
 cd ${CMSSW_BASE}/src
 git clone https://github.com/CMS-HTT/HiggsCPinTauDecays.git

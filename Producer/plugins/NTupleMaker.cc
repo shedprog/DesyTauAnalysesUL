@@ -1,4 +1,4 @@
-#include "DesyTauAnalysesUL/Producer/plugins/NTupleMaker.h"
+#include "DesyTauAnalyses/Producer/plugins/NTupleMaker.h"
 #include "CommonTools/Statistics/interface/ChiSquaredProbability.h"
 //#include "AnalysisDataFormats/TauAnalysis/interface/CompositePtrCandidateT1T2MEtFwd.h"
 //#include "TauAnalysis/CandidateTools/interface/NSVfitAlgorithmBase.h"
@@ -31,7 +31,7 @@
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
 
-#include "DesyTauAnalysesUL/Common/interface/candidateAuxFunctions.h"
+#include "DesyTauAnalyses/Common/interface/candidateAuxFunctions.h"
 //#include "DesyTauAnalyses/NTupleMaker/interface/idAlgos.h"
 
 //#include "ICTauSpinnerProducer.hh"
@@ -58,7 +58,7 @@ typedef ROOT::Math::SVector<double, 3> SVector3; //// SVector: vector of size 3
 // static const unsigned int SKIM_EMU        = (1 << 6);     //64 : e+mu
 // static const unsigned int SKIM_TAUTAU     = (1 << 7);     //128: tau+tau
 
-#include "DesyTauAnalysesUL/Producer/interface/genMatch.h"
+#include "DesyTauAnalyses/Producer/interface/genMatch.h"
 
 void NTupleMaker::computePCA(double * pv, double * refPoint, double * mom, double * pca) {
 

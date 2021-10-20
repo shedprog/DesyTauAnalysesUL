@@ -2,8 +2,8 @@
 
 #include "TMath.h"
 
-#include "DesyTauAnalysesUL/Common/interface/svFitAuxFunctions.h"
-#include "DesyTauAnalysesUL/Common/interface/LikelihoodFunctions.h"
+#include "DesyTauAnalyses/Common/interface/svFitAuxFunctions.h"
+#include "DesyTauAnalyses/Common/interface/LikelihoodFunctions.h"
 
 using namespace SVfit_namespace;
 
