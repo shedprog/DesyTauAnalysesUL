@@ -4,6 +4,8 @@ This setup runs on miniAOD ntuples and uses [grid-control](https://github.com/gr
 
 ## Setup
 
+Please make sure you first run the setup of the DesyTauAnalyses repository following the instructions in the [main directory](https://github.com/DesyTau/DesyTauAnalysesUL#desytauanalysesul).
+
 To run the NTupleMaker on the batch system we recommend the use of [grid-control](https://github.com/grid-control/grid-control).
 Please set up grid-control outside your CMSSW area.
 ```bash
