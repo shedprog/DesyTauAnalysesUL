@@ -71,6 +71,10 @@ The config files are named `gc_DATA.cfg` and `gc_MC.cfg`, the areas to be edited
 * `dataset`: to use a file list provided with Rucio use `<nickname of dataset>: list:<full path to file list>`
 * `nickname config`: python config file (`TreeProducer.py`) to be used for production.
 * `nickname lumi filter`: Json lumi file turned into txt format, to be used when running on DATA.
+* `events per job`: number of events stored in output tree. Recommended values
+  * Signal samples: 10000-20000
+  * Data/MC: 20000-50000 
+
 
 
 Copy the python config file to the area where you plan to run grid-control (again, please choose an area outside CMSSW), and edit the following variables:
