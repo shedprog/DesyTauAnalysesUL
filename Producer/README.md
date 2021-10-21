@@ -66,7 +66,7 @@ Then copy the grid-control config files stored in `Producer/test` to the area wh
 
 The config files are named `gc_DATA.cfg` and `gc_MC.cfg`, the areas to be edited before running are:
 * `se path`: Path to storage area, simply put the full path to store on nfs or `srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/user/<username>/<path to storage area>`
-* `dbs instance`: The default location is `prod/global`, to switch to phys03 or other production instances uncomment this option and specify the type of instance used for the desired datasets
+* `dbs instance`: (Needed only for embedded and private signal samples) The default location is `prod/global` (most MC/data are here), to switch to phys03 or other production instances uncomment this option and specify the type of instance used for the desired datasets
 * `project area`: Input full path to your CMSSW area
 * `dataset`: to use a file list provided with Rucio use `<nickname of dataset>: list:<full path to file list>`
 * `nickname config`: python config file (`TreeProducer.py`) to be used for production.
