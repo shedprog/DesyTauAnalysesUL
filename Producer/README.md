@@ -2,6 +2,12 @@
 
 This setup runs on miniAOD ntuples and uses [grid-control](https://github.com/grid-control/grid-control) for job handling.
 
+## Current Campaing
+
+For practical purposes please add here the link to the google doc with the datasets being produced when a new campaign is called:
+Oktoberfest2021 campaign: [google doc](https://docs.google.com/spreadsheets/d/1MVDy3fOna8GEaYnzBEowtchffwRxakT-ilgZ25H1eRQ/edit?usp=sharing)
+
+
 ## Setup
 
 Please make sure you first run the setup of the DesyTauAnalyses repository following the instructions in the [main directory](https://github.com/DesyTau/DesyTauAnalysesUL#desytauanalysesul).
