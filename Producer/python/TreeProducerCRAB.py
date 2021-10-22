@@ -1,11 +1,15 @@
 import FWCore.ParameterSet.Config as cms
-
+from FWCore.ParameterSet.VarParsing import VarParsing
 
 options = VarParsing('analysis')
 options.register('fileList', '', VarParsing.multiplicity.singleton, VarParsing.varType.string,
                  "List of root files to process.")
 options.register('fileNamePrefix', '', VarParsing.multiplicity.singleton, VarParsing.varType.string,
                  "Prefix to add to input file names.")
+options.register('tupleOutput', 'output_tuple.root', VarParsing.multiplicity.singleton, VarParsing.varType.string,
+                 "Event tuple file.")
+options.register('lumiFile', '', VarParsing.multiplicity.singleton, VarParsing.varType.string,
+                 "JSON file with lumi mask.")
 options.register('isData', False, VarParsing.multiplicity.singleton, VarParsing.varType.bool,
                  "For data : True, for MC : False, for Embedded : True")
 options.register('isSingleMuonData', False, VarParsing.multiplicity.singleton, VarParsing.varType.bool,
@@ -48,12 +52,13 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 
 # Global tag (from : https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVRun2LegacyAnalysis - version : 2021-09-03)
 if isData or isEmbedded : process.GlobalTag.globaltag = '106X_dataRun2_v35'
-
 else:
-    if period is 'UL2016' :   process.GlobalTag.globaltag = '106X_mcRun2_asymptotic_v17'
-    elif period is 'UL2016APV' : process.GlobalTag.globaltag = '106X_mcRun2_asymptotic_preVFP_v11'
-    elif period is 'UL2017' : process.GlobalTag.globaltag = '106X_mc2017_realistic_v9'
-    elif period is 'UL2018' : process.GlobalTag.globaltag = '106X_upgrade2018_realistic_v16_L1v1'
+    if period == 'UL2016' :   process.GlobalTag.globaltag = '106X_mcRun2_asymptotic_v17'
+    elif period == 'UL2016APV' : process.GlobalTag.globaltag = '106X_mcRun2_asymptotic_preVFP_v11'
+    elif period == 'UL2017' : process.GlobalTag.globaltag = '106X_mc2017_realistic_v9'
+    elif period == 'UL2018' : process.GlobalTag.globaltag = '106X_upgrade2018_realistic_v16_L1v1'
+    else:
+        raise Exception('Error: period does not exist, options: UL2016APV, UL2016, UL2017, UL2018')
 
 print "\nGlobal Tag: " + str(process.GlobalTag.globaltag)
 
@@ -70,30 +75,24 @@ process.options = cms.untracked.PSet(
 
 # How many events to process
 process.maxEvents = cms.untracked.PSet(
-   input = cms.untracked.int32(100)
+   input = cms.untracked.int32(-1)
 )
 
-# Define the input source
-import FWCore.PythonUtilities.LumiList as LumiList
-# https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideGoodLumiSectionsJSONFile#cmsRun
-# process.source = cms.Source("PoolSource",
-#   fileNames = cms.untracked.vstring(
-#         #"/store/mc/RunIISummer20UL18MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/120000/001C8DDF-599C-5E45-BF2C-76F887C9ADE9.root" #UL 2018 MC
-#         #"/store/data/Run2018A/SingleMuon/MINIAOD/UL2018_MiniAODv2-v2/120000/0481F84F-6CC0-1846-93BC-B6065B9BDD7E.root" #UL 2018 data
-#         #"/store/data/Run2017C/SingleMuon/MINIAOD/UL2017_MiniAODv2-v1/140000/1135C9BA-483C-0040-9567-63127B3CD3EE.root" #UL 2017 data
-#         #"/store/mc/RunIISummer20UL17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/120000/005B6A7C-B0B1-A745-879B-017FE7933B77.root" #UL2017 MC
-#         #"/store/data/Run2016G/SingleMuon/MINIAOD/UL2016_MiniAODv2-v2/120000/001FDE5F-A989-2F48-A280-D4D0F7766D95.root"#UL2016 data
-#         "/store/mc/RunIISummer20UL16MiniAODv2/DY1JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v1/120000/00061BF0-5BB0-524E-A539-0CAAD8579386.root" #UL2016 MC
-#         #"/store/data/Run2016C/SingleMuon/MINIAOD/HIPM_UL2016_MiniAODv2-v2/130000/0294890E-E9C3-5340-8061-E6FB0E5E79B3.root" #UL2016APV data
-#         #"/store/mc/RunIISummer20UL16MiniAODAPVv2/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v11-v1/120000/06E6E2D8-C2B5-DB44-B335-EA4410CDBAD5.root"#UL2016APV MC
-        
-# 	),
-#   skipEvents = cms.untracked.uint32(0),
-#   #lumisToProcess = LumiList.LumiList(filename = 'json/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt').getVLuminosityBlockRange()
-# )
+if options.maxEvents > 0:
+    process.maxEvents.input = options.maxEvents
 
+# Define the input source
 process.source = cms.Source('PoolSource', fileNames = cms.untracked.vstring(), skipEvents = cms.untracked.uint32(0))
 
+from DesyTauAnalyses.Producer.readFileList import *
+if len(options.fileList) > 0:
+    readFileList(process.source.fileNames, options.fileList, options.fileNamePrefix)
+elif len(options.inputFiles) > 0:
+    addFilesToList(process.source.fileNames, options.inputFiles, options.fileNamePrefix)
+
+if len(options.lumiFile) > 0:
+    import FWCore.PythonUtilities.LumiList as LumiList
+    process.source.lumisToProcess = LumiList.LumiList(filename = options.lumiFile).getVLuminosityBlockRange()
 
 ### JECs ==============================================================================================
 # From :  https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookJetEnergyCorrections#CorrPatJets
@@ -153,19 +152,19 @@ process.puppi.useExistingWeights = True
 # from https://twiki.cern.ch/twiki/bin/view/CMS/EgammaMiniAODV2#2017_MiniAOD_V2%20#https://twiki.cern.ch/twiki/bin/view/CMS/EgammaPostRecoR
 from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 
-if period is 'UL2016APV' :
+if period == 'UL2016APV' :
     labelEra = '2016preVFP-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
-elif period is 'UL2016' :
+elif period == 'UL2016' :
     labelEra = '2016postVFP-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
-elif period is 'UL2017' :
+elif period == 'UL2017' :
     labelEra = '2017-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
-elif period is 'UL2018' :
+elif period == 'UL2018' :
     labelEra = '2018-UL'
     rerunIDs = True
     rerunEnergyCorrections = True
@@ -217,7 +216,7 @@ process.slimmedMuonsWithMVA = cms.EDProducer("PATMuonUserDataEmbedder",
 
 from PhysicsTools.NanoAOD.electrons_cff import isoForEle
 
-if year is 2016 :
+if year == 2016 :
     isoForEle.EAFile_MiniIso = "RecoEgamma/ElectronIdentification/data/Spring15/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_25ns.txt"
     isoForEle.EAFile_PFIso = "RecoEgamma/ElectronIdentification/data/Summer16/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_80X.txt"
 
@@ -321,7 +320,7 @@ else :
 # Pre-firing weights ==========================================================================================
 # https://twiki.cern.ch/twiki/bin/viewauth/CMS/L1PrefiringWeightRecipe#Recipe_details_10_6_X_X_26_or_12
 from PhysicsTools.PatUtils.l1PrefiringWeightProducer_cfi import l1PrefiringWeightProducer
-if period is 'UL2018':
+if period == 'UL2018':
     process.prefiringweight = l1PrefiringWeightProducer.clone(
     TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
     DataEraECAL = cms.string("None"),
@@ -330,7 +329,7 @@ if period is 'UL2018':
     PrefiringRateSystematicUnctyECAL = cms.double(0.2),
     PrefiringRateSystematicUnctyMuon = cms.double(0.2)
     )
-elif period is 'UL2017':
+elif period == 'UL2017':
     process.prefiringweight = l1PrefiringWeightProducer.clone(
     TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
     DataEraECAL = cms.string("UL2017BtoF"),
@@ -339,7 +338,7 @@ elif period is 'UL2017':
     PrefiringRateSystematicUnctyECAL = cms.double(0.2),
     PrefiringRateSystematicUnctyMuon = cms.double(0.2)
     )
-elif period is 'UL2016':
+elif period == 'UL2016':
     process.prefiringweight = l1PrefiringWeightProducer.clone(
     TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
     DataEraECAL = cms.string("UL2016postVFP"),
@@ -348,7 +347,7 @@ elif period is 'UL2016':
     PrefiringRateSystematicUnctyECAL = cms.double(0.2),
     PrefiringRateSystematicUnctyMuon = cms.double(0.2)
     )
-elif period is 'UL2016APV':
+elif period == 'UL2016APV':
     process.prefiringweight = l1PrefiringWeightProducer.clone(
     TheJets = cms.InputTag("updatedPatJetsUpdatedJEC::TreeProducer"), #this should be the slimmedJets collection with up to date JECs !
     DataEraECAL = cms.string("UL2016preVFP"),
@@ -462,9 +461,9 @@ HLTlist_2018 = cms.untracked.vstring(
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v',
     )
 
-if year is 2016   : HLTlist += HLTlist_2016
-elif year is 2017 : HLTlist += HLTlist_2017
-elif year is 2018 : HLTlist += HLTlist_2018
+if year == 2016   : HLTlist += HLTlist_2016
+elif year == 2017 : HLTlist += HLTlist_2017
+elif year == 2018 : HLTlist += HLTlist_2018
 
 print "\nTriggers that will be recorded:"
 print HLTlist
@@ -518,11 +517,11 @@ muon_hlt_filters = cms.untracked.vstring(
     'HLT_IsoMu19_eta2p1_LooseIsoPFTau20_v.*:hltOverlapFilterIsoMu19LooseIsoPFTau20',	
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_TightID_CrossL1_v.*:hltL3crIsoBigORMu18erTauXXer2p1L1f0L2f10QL3f20QL3trkIsoFiltered0p07,hltL3crIsoL1sMu18erTau24erIorMu20erTau24erL1f0L2f10QL3f20QL3trkIsoFiltered0p07',
     )
-if year is not 2016 and not isEmbedded:
+if year != 2016 and not isEmbedded:
     muon_hlt_filters += cms.untracked.vstring(
         'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltOverlapFilterIsoMu20LooseChargedIsoPFTau27L1Seeded',
     )
-if year is 2016 :
+if year == 2016 :
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu20EG10IorMu23EG10',
     'HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu5EG20IorMu5IsoEG18IorMu5IsoEG20IorMu5EG23',
@@ -533,7 +532,7 @@ if year is 2016 :
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v.*:hltL3fL1sDoubleMu114L1f0L2f10OneMuL3Filtered17',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v.*:hltL3pfL1sDoubleMu114L1f0L2pf0L3PreFiltered8,hltL3pfL1sDoubleMu114ORDoubleMu125L1f0L2pf0L3PreFiltered8',
     )
-if year is 2017 :
+if year == 2017 :
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178Mass8Filtered',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
@@ -544,7 +543,7 @@ if year is 2017 :
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178Mass3p8Filtered',
     )
-if year is 2018 :
+if year == 2018 :
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178Mass8Filtered',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
@@ -555,7 +554,7 @@ if year is 2018 :
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178RelTrkIsoFiltered0p4DzFiltered0p2',
     'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v.*:hltDiMuon178Mass3p8Filtered',
     )
-if year is 2018 and isEmbedded:
+if year == 2018 and isEmbedded:
     muon_hlt_filters += cms.untracked.vstring(
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltL1sBigORMu18erTauXXer2p1',
     )
@@ -600,12 +599,12 @@ else:
     electron_hlt_filters +=cms.untracked.vstring(
         'HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1_v.*:hltL1sBigORLooseIsoEGXXerIsoTauYYerdRMin0p3',
     )
-if year is 2016 :
+if year == 2016 :
     electron_hlt_filters +=cms.untracked.vstring(
         'HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu20EG10IorMu23EG10',
         'HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v.*:hltL1sMu5EG20IorMu5IsoEG18IorMu5IsoEG20IorMu5EG23',
     )
-if year is 2017:
+if year == 2017:
     electron_hlt_filters +=cms.untracked.vstring(
         'HLT_Ele35_WPTight_Gsf_v.*:hltEGL1SingleEGOrFilter',
     )
@@ -658,19 +657,19 @@ else:
         'HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1_v.*:hltL1sBigORLooseIsoEGXXerIsoTauYYerdRMin0p3,hltL1sIsoEG22erIsoTau26erdEtaMin0p2',
         'HLT_Ele24_eta2p1_WPTight_Gsf_LooseChargedIsoPFTau30_eta2p1_CrossL1_v.*:hltOverlapFilterIsoEle24WPTightGsfLooseIsoPFTau30',
     )
-if isEmbedded and year is 2016:
+if isEmbedded and year == 2016:
     tau_hlt_filters +=cms.untracked.vstring(
 	'HLT_IsoMu19_eta2p1_LooseIsoPFTau20_v.*:hltL1sMu18erTau20er',
     )
-if isData and year is 2018:
+if isData and year == 2018:
     tau_hlt_filters +=cms.untracked.vstring(
         'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltSelectedPFTau27LooseChargedIsolationAgainstMuonL1HLTMatched',
     )
-if year is 2017:
+if year == 2017:
     tau_hlt_filters +=cms.untracked.vstring(
         'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltSelectedPFTau27LooseChargedIsolationAgainstMuonL1HLTMatched',
     )
-if isEmbedded and year is 2018:
+if isEmbedded and year == 2018:
     tau_hlt_filters +=cms.untracked.vstring(
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTau27_eta2p1_CrossL1_v.*:hltL1sBigORMu18erTauXXer2p1',
     'HLT_IsoMu20_eta2p1_LooseChargedIsoPFTauHPS27_eta2p1_CrossL1_v.*:hltL1sBigORMu18erTauXXer2p1',
@@ -890,15 +889,12 @@ process.p = cms.Path(
 
 #if RunTauSpinnerProducer: process.p *=process.icTauSpinnerSequence
 
-if isData: filename_suffix = "DATA"
-else:      filename_suffix = "MC"
-
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("output_" + filename_suffix + ".root")
+                                   fileName = cms.string(options.tupleOutput)
                                  )
 
 process.output = cms.OutputModule("PoolOutputModule",
-                                  fileName = cms.untracked.string('output_particles_" + filename_suffix + ".root'),
+                                  fileName = cms.untracked.string(options.tupleOutput),
                                   outputCommands = cms.untracked.vstring(
                                     'keep *_*_bad_TreeProducer'#,
                                     #'drop patJets*_*_*_*'
@@ -906,5 +902,5 @@ process.output = cms.OutputModule("PoolOutputModule",
                                     #'drop *_selectedPatJetsForMetT1T2Corr_*_*',
                                     #'drop patJets_*_*_*'
                                   ),
-                                  SelectEvents = cms.untracked.PSet(  SelectEvents = cms.vstring('p'))
+                                  SelectEvents = cms.untracked.PSet( SelectEvents = cms.vstring('p'))
 )
