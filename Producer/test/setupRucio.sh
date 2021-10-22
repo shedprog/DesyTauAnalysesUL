@@ -1,5 +1,5 @@
 #!/bin/bash
-CERNUSER=
+CERNUSER=myshched
 source /cvmfs/grid.desy.de/etc/profile.d/grid-ui-env.sh
 export CMSSW_GIT_REFERENCE=/nfs/dust/cms/user/${USER}/.cmsgit-cache
 source /cvmfs/cms.cern.ch/cmsset_default.sh
@@ -12,6 +12,7 @@ else
     source /cvmfs/cms.cern.ch/cmsset_default.sh
     source /cvmfs/cms.cern.ch/rucio/setup.sh
     export X509_USER_PROXY=~/public/x509_voms
+    export LC_TIME=en_US.UTF-8
     voms-proxy-init -voms cms -rfc -valid 48:00
     export RUCIO_ACCOUNT=$CERNUSER
 fi
