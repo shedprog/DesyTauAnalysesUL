@@ -1036,6 +1036,10 @@ class NTupleMaker : public edm::EDAnalyzer{
   Float_t gentau_e[M_taumaxcount];
   Float_t gentau_charge[M_taumaxcount];
 
+  Float_t gentau_vx[M_taumaxcount];
+  Float_t gentau_vy[M_taumaxcount];
+  Float_t gentau_vz[M_taumaxcount];
+
   Float_t gentau_visible_px[M_taumaxcount];
   Float_t gentau_visible_py[M_taumaxcount];
   Float_t gentau_visible_pz[M_taumaxcount];

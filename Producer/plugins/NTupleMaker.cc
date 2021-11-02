@@ -1059,6 +1059,10 @@ void NTupleMaker::beginJob(){
       tree->Branch("gentau_visible_phi", gentau_visible_phi, "tau_visible_phi[gentau_count]/F");
       tree->Branch("gentau_visible_mass", gentau_visible_mass, "tau_visible_mass[gentau_count]/F");
 
+      tree->Branch("gentau_vx", gentau_vx, "gentau_vx[gentau_count]/F");
+      tree->Branch("gentau_vy", gentau_vy, "gentau_vy[gentau_count]/F");
+      tree->Branch("gentau_vz", gentau_vz, "gentau_vz[gentau_count]/F");
+
       tree->Branch("gentau_visibleNoLep_e",  gentau_visibleNoLep_e,  "tau_visibleNoLep_e[gentau_count]/F");
       tree->Branch("gentau_visibleNoLep_pt",  gentau_visibleNoLep_pt,  "tau_visibleNoLep_pt[gentau_count]/F");
       tree->Branch("gentau_visibleNoLep_eta", gentau_visibleNoLep_eta, "tau_visibleNoLep_eta[gentau_count]/F");
@@ -3094,6 +3098,10 @@ bool NTupleMaker::AddGenParticles(const edm::Event& iEvent) {
 	      gentau_visible_py[gentau_count] = tau_visible_p4.py();
 	      gentau_visible_pz[gentau_count] = tau_visible_p4.pz();
 	      gentau_visible_e[gentau_count]  = tau_visible_p4.energy();
+
+	      gentau_vx[gentau_count] = (*GenParticles)[i].vx();
+	      gentau_vy[gentau_count] = (*GenParticles)[i].vy();
+	      gentau_vz[gentau_count] = (*GenParticles)[i].vz();
 
 	      gentau_visible_pt[gentau_count]   = tau_visible_p4.pt();
 	      gentau_visible_eta[gentau_count]  = tau_visible_p4.eta();
