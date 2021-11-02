@@ -276,7 +276,7 @@ class NTupleMaker : public edm::EDAnalyzer{
 
 
  private:
-  enum MotherNames{HIGGS=1, WBOSON, ZBOSON, TAU};
+  enum MotherNames{HIGGS=1, WBOSON, ZBOSON, TAU, STAU};
   enum MvaMetChannel{EMU=1, ETAU, MUTAU, TAUTAU, MUMU, EE, UNKNOWN};
 
   virtual void beginJob();
