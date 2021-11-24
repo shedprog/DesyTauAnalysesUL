@@ -1,57 +1,23 @@
 #!/bin/bash
 
 DATASETS=(
-    /EGamma/Run2018A-UL2018_MiniAODv2-v1/MINIAOD
-    /EGamma/Run2018B-UL2018_MiniAODv2-v1/MINIAOD
-    /EGamma/Run2018C-UL2018_MiniAODv2-v1/MINIAOD
-    /EGamma/Run2018D-UL2018_MiniAODv2-v2/MINIAOD
-
-    /SingleMuon/Run2018A-UL2018_MiniAODv2-v2/MINIAOD
-    /SingleMuon/Run2018B-UL2018_MiniAODv2-v2/MINIAOD
-    /SingleMuon/Run2018C-UL2018_MiniAODv2-v2/MINIAOD
-    /SingleMuon/Run2018D-UL2018_MiniAODv2-v3/MINIAOD
-
-    /MuonEG/Run2018A-UL2018_MiniAODv2-v1/MINIAOD
-    /MuonEG/Run2018B-UL2018_MiniAODv2-v1/MINIAOD
-    /MuonEG/Run2018C-UL2018_MiniAODv2-v1/MINIAOD
-    /MuonEG/Run2018D-UL2018_MiniAODv2-v1/MINIAOD
-
-    /DoubleMuon/Run2018A-UL2018_MiniAODv2-v1/MINIAOD
-    /DoubleMuon/Run2018B-UL2018_MiniAODv2-v1/MINIAOD
-    /DoubleMuon/Run2018C-UL2018_MiniAODv2-v1/MINIAOD
-    /DoubleMuon/Run2018D-UL2018_MiniAODv2-v1/MINIAOD
-
-    /Tau/Run2018A-UL2018_MiniAODv2-v1/MINIAOD
-    /Tau/Run2018B-UL2018_MiniAODv2-v2/MINIAOD
-    /Tau/Run2018C-UL2018_MiniAODv2-v1/MINIAOD
-    /Tau/Run2018D-UL2018_MiniAODv2-v1/MINIAOD
+    /GluGluHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v3/MINIAODSIM
+    /VBFHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2/MINIAODSIM
+    /WminusHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2/MINIAODSIM
+    /WplusHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2/MINIAODSIM
+    /ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v3/MINIAODSIM
+    /GluGluHToWWTo2L2Nu_M-125_TuneCP5_13TeV-powheg-jhugen727-pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2/MINIAODSIM
+    /VBFHToWWTo2L2Nu_M-125_TuneCP5_13TeV-powheg-jhugen727-pythia8/RunIISummer20UL18MiniAODv2-106X_upgrade2018_realistic_v16_L1v1-v2/MINIAODSIM
 )
 
 DATANICKS=(
-    EGamma-Run2018A-UL2018
-    EGamma-Run2018B-UL2018
-    EGamma-Run2018C-UL2018
-    EGamma-Run2018D-UL2018
-
-    SingleMuon-Run2018A-UL2018
-    SingleMuon-Run2018B-UL2018
-    SingleMuon-Run2018C-UL2018
-    SingleMuon-Run2018D-UL2018
-
-    MuonEG-Run2018A-UL2018
-    MuonEG-Run2018B-UL2018
-    MuonEG-Run2018C-UL2018
-    MuonEG-Run2018D-UL2018
-
-    DoubleMuon-Run2018A-UL2018
-    DoubleMuon-Run2018B-UL2018
-    DoubleMuon-Run2018C-UL2018
-    DoubleMuon-Run2018D-UL2018
-
-    Tau-Run2018A-UL2018
-    Tau-Run2018B-UL2018
-    Tau-Run2018C-UL2018
-    Tau-Run2018D-UL2018
+    GluGluHToTauTau
+    VBFHToTauTau
+    WminusHToTauTau
+    WplusHToTauTau
+    ttHToTauTau
+    GluGluHToWWTo2L2Nu
+    VBFHToWWTo2L2Nu
 )
 
 for i in "${!DATASETS[@]}"; do
